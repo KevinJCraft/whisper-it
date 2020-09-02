@@ -34,7 +34,8 @@ router.post("/", (req, res) => {
 // @desc DELETE a post
 // @access Private
 router.delete("/delete/:id", (req, res) => {
-  Post.findById(req.params.id)
+  const id = req.params.id;
+  Post.findById(id)
     .then((post) => post.remove().then(() => res.json({ success: true })))
     .catch((err) => res.status(404).json({ success: false }));
 });
@@ -42,13 +43,21 @@ router.delete("/delete/:id", (req, res) => {
 // @route PUT api/posts/like
 // @desc Like a post
 // @access Public
-router.put("/like/:id", (req, res) => {
-  Post.findById(req.params.id)
-    .then((post) =>
+router.put("/like", (req, res) => {
+  Post.findById(req.body.id)
+    .then((post) => {
+      const userName = req.body.userName;
+      const userIndex = post.likes.indexOf(userName);
+      const newLikes = [...post.likes];
+      if (userIndex === -1) {
+        newLikes.push(userName);
+      } else {
+        newLikes.splice(userIndex, 1);
+      }
       post
-        .updateOne({ $set: { likes: post.likes + 1 } })
-        .then(() => res.json({ success: true }))
-    )
+        .updateOne({ $set: { likes: newLikes } })
+        .then((response) => res.json({ success: true }));
+    })
     .catch((err) => res.statusCode(404).json({ success: false }));
 });
 

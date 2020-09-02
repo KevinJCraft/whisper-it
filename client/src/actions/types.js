@@ -12,3 +12,4 @@ export const REGISER_SUCCESS = "REGISER_SUCCESS";
 export const REGISTER_FAIL = "REGISTER_FAIL";
 export const GET_ERRORS = "GET_ERRORS";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
+export const LIKE_POST = "LIKE_POST";

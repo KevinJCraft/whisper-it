@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Paper, TextField, Button, Grid } from "@material-ui/core";
+import { TextField, Button, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ChatIcon from "@material-ui/icons/Chat";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,12 +32,9 @@ const CreatePost = () => {
   const [state, setState] = useState(INITIAL_STATE);
   const history = useHistory();
   const dispatch = useDispatch();
+  const userName = useSelector((state) => state.auth.user.userName);
 
   const classes = useStyles();
-
-  const handleClose = () => {
-    setState(INITIAL_STATE);
-  };
 
   const handleChange = (e) => {
     setState({ ...state, [e.target.id]: e.target.value });
@@ -48,7 +45,7 @@ const CreatePost = () => {
     const newPost = {
       title: state.title,
       body: state.body,
-      userName: "Sam",
+      userName: userName,
     };
     addPost(dispatch, newPost);
     setState(INITIAL_STATE);

@@ -50,11 +50,7 @@ export default function AppBarHeader() {
             Welcome {user.userName}
           </Typography>
 
-          <Button
-            onClick={() => history.push("/create")}
-            variant="containted"
-            color="inherit"
-          >
+          <Button onClick={() => history.push("/create")} color="inherit">
             New Post
           </Button>
 

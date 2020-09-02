@@ -2,12 +2,16 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 //Create Schema
-const PostSchema = new Schema({
+const CommentSchema = new Schema({
   userName: {
     type: String,
     required: true,
   },
-  title: {
+  parentType: {
+    type: String,
+    required: true,
+  },
+  parentId: {
     type: String,
     required: true,
   },
@@ -17,7 +21,7 @@ const PostSchema = new Schema({
   },
   likes: {
     type: Array,
-    default: [],
+    default: 0,
   },
   comments: {
     type: Array,

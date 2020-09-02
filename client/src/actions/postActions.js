@@ -1,9 +1,8 @@
-import { GET_POSTS, ADD_POST, DELETE_POST } from "./types";
+import { GET_POSTS, ADD_POST, DELETE_POST, GET_ERRORS } from "./types";
 import axios from "axios";
 
 export const getPosts = (dispatch) => {
   axios.get("/api/posts").then((res) => {
-    console.log("inside: ", res.data);
     dispatch({
       type: GET_POSTS,
       payload: res.data,
@@ -17,5 +16,17 @@ export const addPost = (dispatch, post) => {
       type: ADD_POST,
       payload: res.data,
     });
+  });
+};
+
+export const likePost = (dispatch, data) => {
+  axios.put(`/api/posts/like`, data).then((res) => {
+    getPosts(dispatch);
+  });
+};
+
+export const deletePost = (dispatch, { id }) => {
+  axios.delete(`/api/posts/delete/${id}`).then((res) => {
+    getPosts(dispatch);
   });
 };

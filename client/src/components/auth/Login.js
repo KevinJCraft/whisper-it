@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Button, Modal, Paper, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../actions/authActions";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   loginModal: {
@@ -45,6 +46,7 @@ const INITIAL_STATE = {
 const Login = () => {
   const [state, setState] = useState(INITIAL_STATE);
   const dispatch = useDispatch();
+  const error = useSelector((state) => state.error);
 
   const classes = useStyles();
 
@@ -99,6 +101,9 @@ const Login = () => {
               Login
             </Button>
           </form>
+          {error.id === "LOGIN_FAIL" && (
+            <Alert severity="error">{error.msg.msg}</Alert>
+          )}
         </Paper>
       </Modal>
     </>
