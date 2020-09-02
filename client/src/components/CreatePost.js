@@ -50,7 +50,7 @@ const CreatePost = () => {
       body: state.body,
       userName: "Sam",
     };
-    dispatch(addPost(newPost));
+    addPost(dispatch, newPost);
     setState(INITIAL_STATE);
     history.push("/");
   };

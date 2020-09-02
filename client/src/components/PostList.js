@@ -4,12 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPosts } from "../actions/postActions";
 
 const PostList = () => {
-  const posts = [{ userName: "Kevin", title: "this", body: "that" }];
-  console.log("insie", posts);
+  const posts = useSelector((state) => state.posts);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getPosts());
+    getPosts(dispatch);
   }, []);
   return posts
     ? posts.map((post, index) => (
