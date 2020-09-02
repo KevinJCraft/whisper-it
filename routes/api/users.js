@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
 
 // @route Post api/users
-// @desc Get All users
+// @desc Register new user
 // @access Public
 router.post("/", (req, res) => {
   const { userName, password } = req.body;
@@ -34,7 +34,7 @@ router.post("/", (req, res) => {
         newUser.save().then((user) => {
           jwt.sign(
             { id: user.id, userName: user.userName },
-            config.get("jwtSecret"),
+            process.env.jwtSecret,
             { expiresIn: 3600 },
             (err, token) => {
               if (err) throw err;

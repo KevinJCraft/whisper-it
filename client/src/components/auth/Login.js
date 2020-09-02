@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Button, Modal, Paper, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import { useDispatch } from "react-redux";
+import { login } from "../../actions/authActions";
 
 const useStyles = makeStyles((theme) => ({
   loginModal: {
@@ -42,6 +44,7 @@ const INITIAL_STATE = {
 
 const Login = () => {
   const [state, setState] = useState(INITIAL_STATE);
+  const dispatch = useDispatch();
 
   const classes = useStyles();
 
@@ -55,6 +58,15 @@ const Login = () => {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newUser = {
+      userName: state.userName,
+      password: state.password,
+    };
+    login(dispatch, newUser);
+  };
+
   return (
     <>
       <Button
@@ -66,7 +78,7 @@ const Login = () => {
       <Modal open={state.open} onClose={handleClose}>
         <Paper className={classes.loginModal}>
           <AccountCircleIcon className={classes.icon} />
-          <form className={classes.form}>
+          <form onSubmit={handleSubmit} className={classes.form}>
             <TextField
               onChange={handleChange}
               id="userName"
@@ -83,7 +95,7 @@ const Login = () => {
               value={state.password}
               className={classes.formItem}
             />
-            <Button variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary">
               Login
             </Button>
           </form>

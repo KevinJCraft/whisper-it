@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Modal, Paper, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../../actions/authActions";
+import { clearErrors } from "../../actions/errorActions";
+import { REGISER_SUCCESS } from "../../actions/types";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   loginModal: {
@@ -38,15 +43,19 @@ const INITIAL_STATE = {
   userName: "",
   password: "",
   dupPassword: "",
-  rememberMe: false,
+  msg: null,
 };
 
 const Register = () => {
   const [state, setState] = useState(INITIAL_STATE);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const error = useSelector((state) => state.error);
+  const dispatch = useDispatch();
 
   const classes = useStyles();
 
   const handleClose = () => {
+    clearErrors(dispatch);
     setState(INITIAL_STATE);
   };
 
@@ -54,6 +63,15 @@ const Register = () => {
     if (e.target.value.length < 15) {
       setState({ ...state, [e.target.id]: e.target.value });
     }
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const newUser = {
+      userName: state.userName,
+      password: state.password,
+    };
+    register(dispatch, newUser);
   };
 
   return (
@@ -67,7 +85,7 @@ const Register = () => {
       <Modal open={state.open} onClose={handleClose}>
         <Paper className={classes.loginModal}>
           <AccountCircleIcon className={classes.icon} />
-          <form className={classes.form}>
+          <form onSubmit={onSubmit} className={classes.form}>
             <TextField
               onChange={handleChange}
               id="userName"
@@ -92,10 +110,13 @@ const Register = () => {
               value={state.dupPassword}
               className={classes.formItem}
             />
-            <Button variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary">
               Login
             </Button>
           </form>
+          {error.id === "REGISTER_FAIL" && (
+            <Alert severity="error">{error.msg.msg}</Alert>
+          )}
         </Paper>
       </Modal>
     </>

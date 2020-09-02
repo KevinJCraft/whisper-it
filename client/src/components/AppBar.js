@@ -1,11 +1,14 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { CssBaseline } from "@material-ui/core";
+import { CssBaseline, Button } from "@material-ui/core";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
+import LogOut from "./auth/LogOut";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,10 +25,44 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  welcomeMessage: {
+    paddingRight: "3rem",
+  },
 }));
 
-export default function ButtonAppBar() {
+export default function AppBarHeader() {
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   const classes = useStyles();
+  const history = useHistory();
+
+  const displayAuthOptions = () => {
+    if (!isAuthenticated) {
+      return (
+        <>
+          <Login />
+          <Register />
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Typography className={classes.welcomeMessage}>
+            Welcome {user.userName}
+          </Typography>
+
+          <Button
+            onClick={() => history.push("/create")}
+            variant="containted"
+            color="inherit"
+          >
+            New Post
+          </Button>
+
+          <LogOut />
+        </>
+      );
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -35,8 +72,8 @@ export default function ButtonAppBar() {
           <Typography variant="h6" className={classes.title}>
             Whisper-it
           </Typography>
-          <Login />
-          <Register />
+
+          {displayAuthOptions()}
         </Toolbar>
       </AppBar>
     </div>
