@@ -1,17 +1,19 @@
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
-const config = require("config");
 
 const app = express();
 app.use(express.json());
 
-//DB Config
-const db = config.get("mongoURI");
-
 //Connect to Mongo
 mongoose
-  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("MongoDB connected..."))
   .catch((err) => console.log(err));
 
