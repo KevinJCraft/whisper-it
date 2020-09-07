@@ -20,7 +20,13 @@ router.post("/", (req, res) => {
         post.comments.push(newComment);
         post
           .save()
-          .then((response) => res.json(response))
+          .then((response) =>
+            res.json({
+              parentId: response._id,
+              newComment,
+              OPid: req.body.OPid,
+            })
+          )
           .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
