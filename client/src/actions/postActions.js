@@ -1,4 +1,10 @@
-import { GET_POSTS, ADD_POST, DELETE_POST, GET_ERRORS } from "./types";
+import {
+  GET_POSTS,
+  ADD_POST,
+  GET_COMMENTS,
+  DELETE_POST,
+  GET_ERRORS,
+} from "./types";
 import axios from "axios";
 
 export const getPosts = (dispatch) => {

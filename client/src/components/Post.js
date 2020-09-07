@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { likePost } from "../actions/postActions";
 import {
@@ -61,9 +62,11 @@ const Post = ({ post }) => {
         >
           like {post.likes.length}
         </Button>
-        <Button size="small" color="inherit">
-          comments
-        </Button>
+        <Link to={`/comments/${post._id}`}>
+          <Button size="small" color="inherit">
+            comments
+          </Button>
+        </Link>
         <Delete typeToDelete="post" post={post} />
       </CardActions>
     </Card>

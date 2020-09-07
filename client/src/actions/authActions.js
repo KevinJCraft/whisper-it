@@ -12,6 +12,8 @@ import {
   REGISER_SUCCESS,
 } from "./types";
 
+axios.defaults.baseURL = "http://localhost:3000/";
+
 //check token and load user
 export const loadUser = (dispatch) => {
   //User loading

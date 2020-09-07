@@ -7,6 +7,7 @@ import { loadUser } from "../actions/authActions";
 
 import { Provider } from "react-redux";
 import store from "../store";
+import ViewPost from "./ViewPost";
 
 function App() {
   useEffect(() => {
@@ -23,6 +24,9 @@ function App() {
             </Route>
             <Route path="/create">
               <CreatePost />
+            </Route>
+            <Route path="/comments/:id">
+              <ViewPost />
             </Route>
           </Switch>
         </Router>

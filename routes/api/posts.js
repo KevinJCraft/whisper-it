@@ -11,7 +11,20 @@ const Post = require("../../models/Post");
 router.get("/", (req, res) => {
   Post.find()
     .sort({ date: -1 })
-    .then((posts) => res.json(posts));
+    .then((posts) => res.json(posts))
+    .catch((err) => res.json());
+});
+
+// @route GET api/posts/one
+// @des GET ONE post by id
+// @access Public
+router.get("/one/:id", (req, res) => {
+  console.log(req.params.id);
+  Post.findById(req.params.id)
+    .populate("comments")
+    .sort({ date: -1 })
+    .then((posts) => res.json(posts))
+    .catch((err) => res.status(404).json({ msg: "message not found" }));
 });
 
 // @route Post api/posts

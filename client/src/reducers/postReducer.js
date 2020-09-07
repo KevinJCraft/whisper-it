@@ -17,6 +17,7 @@ export default (state = INITIAL_STATE, action) => {
         else return post;
       });
       return [...posts];
+
     default:
       return state;
   }

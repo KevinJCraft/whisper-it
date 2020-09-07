@@ -13,3 +13,5 @@ export const REGISTER_FAIL = "REGISTER_FAIL";
 export const GET_ERRORS = "GET_ERRORS";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
 export const LIKE_POST = "LIKE_POST";
+export const GET_COMMENTS = "GET_COMMENTS";
+export const ADD_COMMENT = "ADD_COMMENT";

@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const Comment = require("./Comment").schema;
+
 //Create Schema
 const PostSchema = new Schema({
   userName: {
@@ -19,10 +21,7 @@ const PostSchema = new Schema({
     type: Array,
     default: [],
   },
-  comments: {
-    type: Array,
-    default: [],
-  },
+  comments: [{ type: Schema.Types.ObjectId, ref: "comment" }],
   date: {
     type: Date,
     default: Date.now,
