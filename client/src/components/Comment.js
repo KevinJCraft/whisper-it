@@ -9,10 +9,10 @@ import {
   CardActions,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Delete from "./Delete";
-import { GET_COMMENTS } from "../actions/types";
 import ReplyForm from "./ReplyForm";
+import { likeComment } from "../actions/commentActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const Comment = ({ comment, OPid }) => {
   const [expand, setExpand] = useState(false);
   const classes = useStyles();
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const userName = useSelector((state) => state.auth.user.userName);
 
@@ -34,8 +35,8 @@ const Comment = ({ comment, OPid }) => {
     setExpand(!expand);
   };
 
-  const handleLike = () => {
-    //likePost(dispatch, { id: post._id, userName });
+  const handleLikeComment = () => {
+    likeComment(dispatch, { id: comment._id, userName });
   };
 
   const getLikedStyle = () => {
@@ -44,7 +45,7 @@ const Comment = ({ comment, OPid }) => {
     else return {};
   };
 
-  const getdisplay = () => {
+  const getReplyStyle = () => {
     if (!isAuthenticated) return { display: "none" };
     else return { display: "block" };
   };
@@ -63,25 +64,31 @@ const Comment = ({ comment, OPid }) => {
             OPid={OPid}
             parentType="comment"
             parentId={comment._id}
+            parentDepth={comment.depth}
           />
         </Collapse>
         <CardActions>
           <Button
             style={getLikedStyle()}
-            onClick={handleLike}
+            onClick={handleLikeComment}
             size="small"
             color="inherit"
           >
             like {comment.likes.length}
           </Button>
           <Button
-            style={getdisplay()}
+            style={getReplyStyle()}
             onClick={toggleExpand}
             size="small"
             color="inherit"
           >
             reply
           </Button>
+          <Delete
+            typeToDelete="comment"
+            userName={comment.userName}
+            id={comment._id}
+          />
         </CardActions>
         {comment.comments.map((comment, index) => (
           <Comment OPid={OPid} key={index} comment={comment} />

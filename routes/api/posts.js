@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
 
-//  Post Model
 const Post = require("../../models/Post");
+const USer = require("../../models/User");
+const User = require("../../models/User");
 
 // @route GET api/posts
 // @desc Get All posts
@@ -19,7 +20,6 @@ router.get("/", (req, res) => {
 // @des GET ONE post by id
 // @access Public
 router.get("/one/:id", (req, res) => {
-  console.log(req.params.id);
   Post.findById(req.params.id)
     .populate("comments")
     .sort({ date: -1 })
@@ -30,17 +30,21 @@ router.get("/one/:id", (req, res) => {
 // @route Post api/posts
 // @desc Post a post
 // @access Private
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const newPost = new Post({
     userName: req.body.userName,
     title: req.body.title,
     body: req.body.body,
   });
-
-  newPost
-    .save()
-    .then((post) => res.json(post))
-    .catch((err) => console.log(err));
+  try {
+    const savedPost = await newPost.save();
+    const user = await User.findOne({ userName: savedPost.userName });
+    user.posts.push(savedPost);
+    user.save();
+    res.json(savedPost);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // @route DELETE api/posts/delete
@@ -71,7 +75,7 @@ router.put("/like", (req, res) => {
         .updateOne({ $set: { likes: newLikes } })
         .then((response) => res.json({ success: true }));
     })
-    .catch((err) => res.statusCode(404).json({ success: false }));
+    .catch((err) => res.status(404).json({ success: false }));
 });
 
 module.exports = router;

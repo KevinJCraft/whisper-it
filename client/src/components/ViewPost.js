@@ -13,7 +13,6 @@ const ViewPost = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     getPostAndComments(dispatch, id);
-    console.log();
   }, []);
   return (
     <>
@@ -25,6 +24,7 @@ const ViewPost = () => {
           OPid={id}
           parentType="post"
           parentId={id}
+          parentDepth={0}
         />
       </Collapse>
       {commentState[id]?.comments.map((comment, index) => (

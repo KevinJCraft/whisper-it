@@ -21,6 +21,22 @@ const CommentSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  parentType: {
+    type: String,
+    required: true,
+  },
+  parentId: {
+    type: String,
+    required: true,
+  },
+  OPid: {
+    type: String,
+    required: true,
+  },
+  depth: {
+    type: Number,
+    required: true,
+  },
 });
 
 CommentSchema.add({

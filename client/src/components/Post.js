@@ -47,7 +47,9 @@ const Post = ({ post }) => {
       <CardHeader
         avatar={<Avatar>{post.userName[0]}</Avatar>}
         title={post.title}
-        subheader={post.userName}
+        subheader={
+          <Link to={`/user/profile/${post.userName}`}>{post.userName}</Link>
+        }
         onClick={toggleExpand}
       />
       <Collapse onClick={() => setExpand(false)} in={expand}>
@@ -67,7 +69,7 @@ const Post = ({ post }) => {
             comments
           </Button>
         </Link>
-        <Delete typeToDelete="post" post={post} />
+        <Delete typeToDelete="post" userName={post.userName} id={post._id} />
       </CardActions>
     </Card>
   );

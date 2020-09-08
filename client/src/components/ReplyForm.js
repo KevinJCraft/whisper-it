@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ReplyForm = ({ setExpand, parentType, parentId, OPid }) => {
+const ReplyForm = ({ parentDepth, setExpand, parentType, parentId, OPid }) => {
   const [state, setState] = useState("");
   const userName = useSelector((state) => state.auth.user.userName);
   const dispatch = useDispatch();
@@ -27,10 +27,13 @@ const ReplyForm = ({ setExpand, parentType, parentId, OPid }) => {
       parentType,
       parentId,
       OPid,
+      parentDepth,
     };
     addComment(dispatch, comment);
     setState("");
-    setExpand(false);
+    if (parentType === "comment") {
+      setExpand(false);
+    }
   };
   return (
     <Grid container justify="center">

@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 
 //  User Model
 const User = require("../../models/User");
+const Post = require("../../models/Post");
+const Comment = require("../../models/Comment");
 
 // @route Post api/users
 // @desc Register new user
@@ -51,6 +53,21 @@ router.post("/", (req, res) => {
       });
     });
   });
+});
+
+// @route GET api/users/profile
+// @desc GET USer activity
+// @access Public
+
+router.get("/profile/:profileName", async (req, res) => {
+  const profileName = req.params.profileName;
+  try {
+    const posts = await Post.find({ userName: profileName });
+    const comments = await Comment.find({ userName: profileName });
+    res.json({ posts, comments, profileName: profileName });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;

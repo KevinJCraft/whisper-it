@@ -8,6 +8,7 @@ import { loadUser } from "../actions/authActions";
 import { Provider } from "react-redux";
 import store from "../store";
 import ViewPost from "./ViewPost";
+import ViewProfile from "./ViewProfile";
 
 function App() {
   useEffect(() => {
@@ -27,6 +28,9 @@ function App() {
             </Route>
             <Route path="/comments/:id">
               <ViewPost />
+            </Route>
+            <Route path="/user/profile/:name">
+              <ViewProfile />
             </Route>
           </Switch>
         </Router>

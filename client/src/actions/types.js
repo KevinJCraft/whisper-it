@@ -15,3 +15,6 @@ export const CLEAR_ERRORS = "CLEAR_ERRORS";
 export const LIKE_POST = "LIKE_POST";
 export const GET_COMMENTS = "GET_COMMENTS";
 export const ADD_COMMENT = "ADD_COMMENT";
+export const DELETE_COMMENT = "DELETE_COMMENT";
+export const LIKE_COMMENT = "LIKE_COMMENT";
+export const GET_USER_PROFILE = "GET_USER_PROFILE";

@@ -2,52 +2,82 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
 
-//  Post Model
 const Comment = require("../../models/Comment");
 const Post = require("../../models/Post");
 
-// copy from posts to start back
-router.post("/", (req, res) => {
+// @route POST api/comments
+// @des ADD One Comment
+// @access Public
+
+router.post("/", async (req, res) => {
   const newComment = new Comment({
     userName: req.body.userName,
     body: req.body.body,
+    OPid: req.body.OPid,
+    parentType: req.body.parentType,
+    parentId: req.body.parentId,
+    depth: req.body.parentDepth + 1,
   });
   newComment.save();
 
   if (req.body.parentType === "post") {
-    Post.findById(req.body.parentId)
-      .then((post) => {
-        post.comments.push(newComment);
-        post
-          .save()
-          .then((response) =>
-            res.json({
-              parentId: response._id,
-              newComment,
-              OPid: req.body.OPid,
-            })
-          )
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
+    try {
+      const parentPost = await Post.findById(req.body.parentId);
+      parentPost.comments.push(newComment);
+      const newParentPost = await parentPost.save();
+      res.json({ newComment });
+    } catch (error) {
+      console.log(error);
+    }
   } else if (req.body.parentType == "comment") {
-    Comment.findById(req.body.parentId)
-      .then((comment) => {
-        comment.comments.push(newComment);
-        comment
-          .save()
-          .then((response) => {
-            console.log(req.body.OPid);
-            res.json({
-              parentId: response._id,
-              newComment,
-              OPid: req.body.OPid,
-            });
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => console.log(err));
+    try {
+      const parentComment = await Comment.findById(req.body.parentId);
+      parentComment.comments.push(newComment);
+      const newParentComment = await parentComment.save();
+      res.json({ newComment });
+    } catch (error) {
+      console.log(error);
+    }
   }
+});
+
+// @route PUT api/comments/delete
+// @des Delete (remove content) One Comment
+// @access Public
+
+router.put("/delete/:id", (req, res) => {
+  const id = req.params.id;
+  Comment.findById(id)
+    .then((comment) => {
+      comment.userName = "-deleted-";
+      comment.body = "-deleted-";
+      comment
+        .save()
+        .then((deletedComment) => res.json(deletedComment))
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+});
+
+// @route PUT api/comments/like
+// @des Like One Comment
+// @access Public
+
+router.put("/like", (req, res) => {
+  Comment.findById(req.body.id)
+    .then((comment) => {
+      const userName = req.body.userName;
+      const userIndex = comment.likes.indexOf(userName);
+      const newLikes = [...comment.likes];
+      if (userIndex === -1) {
+        newLikes.push(userName);
+      } else {
+        newLikes.splice(userIndex, 1);
+      }
+      comment.likes = newLikes;
+      comment.save().then((updatedComment) => res.json(updatedComment));
+    })
+    .catch((err) => res.status(404).json({ success: false }));
 });
 
 module.exports = router;

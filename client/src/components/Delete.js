@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useDispatch, useSelector } from "react-redux";
 import { deletePost } from "../actions/postActions";
+import { deleteComment } from "../actions/commentActions";
 
 const useStyles = makeStyles((theme) => ({
   loginModal: {
@@ -35,9 +36,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Delete = ({ typeToDelete, post }) => {
+const Delete = ({ typeToDelete, userName, id }) => {
   const [modal, setModal] = useState(false);
-  const userName = useSelector((state) => state.auth.user.userName);
+  const currentUserName = useSelector((state) => state.auth.user.userName);
   const dispatch = useDispatch();
 
   const classes = useStyles();
@@ -46,12 +47,13 @@ const Delete = ({ typeToDelete, post }) => {
   };
 
   const handleDelete = () => {
-    deletePost(dispatch, { id: post._id });
+    if (typeToDelete === "post") deletePost(dispatch, { id });
+    if (typeToDelete === "comment") deleteComment(dispatch, { id });
     setModal(false);
   };
 
   const getButtonVisibility = () => {
-    if (post.userName === userName) return { display: "block" };
+    if (userName === currentUserName) return { display: "block" };
     else return { display: "none" };
   };
 

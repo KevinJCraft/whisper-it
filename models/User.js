@@ -12,6 +12,18 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "comment",
+    },
+  ],
+  posts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "post",
+    },
+  ],
   date: {
     type: Date,
     default: Date.now,
