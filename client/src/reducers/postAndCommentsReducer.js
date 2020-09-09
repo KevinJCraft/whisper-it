@@ -1,5 +1,5 @@
 import {
-  GET_COMMENTS,
+  GET_POST_AND_COMMENTS,
   ADD_COMMENT,
   DELETE_COMMENT,
   LIKE_COMMENT,
@@ -11,33 +11,31 @@ const INITIAL_STATE = {};
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case GET_COMMENTS:
-      return { ...state, [action.payload._id]: action.payload };
+    case GET_POST_AND_COMMENTS:
+      return action.payload;
     case ADD_COMMENT:
+      state.numOfComments = state.numOfComments + 1;
       return {
-        ...state,
-        [action.payload.newComment.OPid]: recursiveAddComment(
+        ...recursiveAddComment(
           action.payload.newComment.parentId,
-          state[action.payload.newComment.OPid],
+          state,
           action.payload.newComment
         ),
       };
+
     case DELETE_COMMENT:
       const newComments = recursiveDeleteComment(
         action.payload,
-        state[action.payload.OPid].comments
+        state.comments
       );
       const newState = state;
-      newState[action.payload.OPid].comments = newComments;
+      newState.comments = newComments;
       return { ...newState };
 
     case LIKE_COMMENT: {
-      const newComments = recursiveLikeComment(
-        action.payload,
-        state[action.payload.OPid].comments
-      );
+      const newComments = recursiveLikeComment(action.payload, state.comments);
       const newState = state;
-      newState[action.payload.OPid].comments = newComments;
+      newState.comments = newComments;
       return { ...newState };
     }
 

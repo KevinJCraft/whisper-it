@@ -22,8 +22,12 @@ const PostSchema = new Schema({
     default: [],
   },
   comments: [{ type: Schema.Types.ObjectId, ref: "comment" }],
+  numOfComments: {
+    type: Number,
+    default: 0,
+  },
   date: {
-    type: Date,
+    type: Number,
     default: Date.now,
   },
   depth: {

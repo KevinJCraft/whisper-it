@@ -35,7 +35,9 @@ router.post("/", async (req, res) => {
     userName: req.body.userName,
     title: req.body.title,
     body: req.body.body,
+    likes: [req.body.userName],
   });
+
   try {
     const savedPost = await newPost.save();
     const user = await User.findOne({ userName: savedPost.userName });

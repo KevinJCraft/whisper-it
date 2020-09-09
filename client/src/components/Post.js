@@ -13,6 +13,9 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import Delete from "./Delete";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
+TimeAgo.addLocale(en);
 
 const useStyles = makeStyles((theme) => ({
   bodyStyle: {
@@ -27,6 +30,7 @@ const Post = ({ post }) => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const userName = useSelector((state) => state.auth.user.userName);
+  const timeAgo = new TimeAgo("en-US");
 
   const toggleExpand = () => {
     setExpand(!expand);
@@ -52,6 +56,9 @@ const Post = ({ post }) => {
         }
         onClick={toggleExpand}
       />
+      <p>
+        <small>{timeAgo.format(post.date)}</small>
+      </p>
       <Collapse onClick={() => setExpand(false)} in={expand}>
         <CardContent className={classes.bodyStyle}>{post.body}</CardContent>
       </Collapse>
@@ -66,7 +73,7 @@ const Post = ({ post }) => {
         </Button>
         <Link to={`/comments/${post._id}`}>
           <Button size="small" color="inherit">
-            comments
+            comments({post.numOfComments})
           </Button>
         </Link>
         <Delete typeToDelete="post" userName={post.userName} id={post._id} />

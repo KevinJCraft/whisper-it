@@ -9,15 +9,15 @@ import { Collapse } from "@material-ui/core";
 const ViewPost = () => {
   const [expand, setExpand] = useState(true);
   const { id } = useParams();
-  const commentState = useSelector((state) => state.comments);
+  const PostAndComments = useSelector((state) => state.postAndComments);
   const dispatch = useDispatch();
   useEffect(() => {
     getPostAndComments(dispatch, id);
   }, []);
   return (
     <>
-      <h1>{commentState[id]?.title}</h1>
-      <h2>{commentState[id]?.body}</h2>
+      <h1>{PostAndComments?.title}</h1>
+      <h2>{PostAndComments?.body}</h2>
       <Collapse in={expand}>
         <ReplyForm
           setExpand={setExpand}
@@ -27,7 +27,8 @@ const ViewPost = () => {
           parentDepth={0}
         />
       </Collapse>
-      {commentState[id]?.comments.map((comment, index) => (
+      <h4>comments ({PostAndComments?.numOfComments})</h4>
+      {PostAndComments.comments?.map((comment, index) => (
         <Comment key={index} comment={comment} OPid={id} />
       ))}
     </>

@@ -24,6 +24,7 @@ router.post("/", async (req, res) => {
     try {
       const parentPost = await Post.findById(req.body.parentId);
       parentPost.comments.push(newComment);
+      parentPost.numOfComments += 1;
       const newParentPost = await parentPost.save();
       res.json({ newComment });
     } catch (error) {
@@ -31,6 +32,11 @@ router.post("/", async (req, res) => {
     }
   } else if (req.body.parentType == "comment") {
     try {
+      //add to OP comment count
+      const parentPost = await Post.findById(req.body.OPid);
+      parentPost.numOfComments += 1;
+      const newParentPost = await parentPost.save();
+      //push comment into parent comment
       const parentComment = await Comment.findById(req.body.parentId);
       parentComment.comments.push(newComment);
       const newParentComment = await parentComment.save();

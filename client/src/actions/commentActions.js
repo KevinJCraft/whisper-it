@@ -1,5 +1,5 @@
 import {
-  GET_COMMENTS,
+  GET_POST_AND_COMMENTS,
   ADD_COMMENT,
   DELETE_COMMENT,
   LIKE_POST,
@@ -13,7 +13,7 @@ export const getPostAndComments = (dispatch, id) => {
     .get(`/api/posts/one/${id}`)
     .then((res) => {
       dispatch({
-        type: GET_COMMENTS,
+        type: GET_POST_AND_COMMENTS,
         payload: res.data,
       });
     })
