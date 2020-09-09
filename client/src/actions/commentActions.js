@@ -2,11 +2,10 @@ import {
   GET_POST_AND_COMMENTS,
   ADD_COMMENT,
   DELETE_COMMENT,
-  LIKE_POST,
   LIKE_COMMENT,
+  LIKE_POST_AND_COMMENTS,
 } from "./types";
 import axios from "axios";
-import { getPosts } from "./postActions";
 
 export const getPostAndComments = (dispatch, id) => {
   axios
@@ -45,6 +44,15 @@ export const likeComment = (dispatch, data) => {
   axios.put(`/api/comments/like`, data).then((res) => {
     dispatch({
       type: LIKE_COMMENT,
+      payload: res.data,
+    });
+  });
+};
+
+export const likePost = (dispatch, data) => {
+  axios.put(`/api/posts/like`, data).then((res) => {
+    dispatch({
+      type: LIKE_POST_AND_COMMENTS,
       payload: res.data,
     });
   });

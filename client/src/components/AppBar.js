@@ -9,6 +9,7 @@ import Login from "./auth/Login";
 import Register from "./auth/Register";
 import LogOut from "./auth/LogOut";
 import { useSelector } from "react-redux";
+import InsertCommentIcon from "@material-ui/icons/InsertComment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AppBarHeader() {
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const classes = useStyles();
   const history = useHistory();
 
@@ -46,12 +47,8 @@ export default function AppBarHeader() {
     } else {
       return (
         <>
-          <Typography className={classes.welcomeMessage}>
-            Welcome {user.userName}
-          </Typography>
-
           <Button onClick={() => history.push("/create")} color="inherit">
-            New Post
+            <InsertCommentIcon />
           </Button>
 
           <LogOut />

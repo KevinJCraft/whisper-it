@@ -5,7 +5,6 @@ import {
   Avatar,
   Collapse,
   Button,
-  CardContent,
   CardActions,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";

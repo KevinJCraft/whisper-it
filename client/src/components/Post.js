@@ -3,21 +3,24 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { likePost } from "../actions/postActions";
 import {
-  Card,
-  CardHeader,
-  Avatar,
-  CardActions,
-  Button,
   Collapse,
   CardContent,
   makeStyles,
+  Typography,
+  Grid,
 } from "@material-ui/core";
-import Delete from "./Delete";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 TimeAgo.addLocale(en);
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+  title: {
+    textDecoration: "none",
+  },
   bodyStyle: {
     paddingLeft: "4rem",
     overflowWrap: "break-word",
@@ -32,53 +35,46 @@ const Post = ({ post }) => {
   const userName = useSelector((state) => state.auth.user.userName);
   const timeAgo = new TimeAgo("en-US");
 
-  const toggleExpand = () => {
-    setExpand(!expand);
-  };
-
   const handleLike = () => {
     likePost(dispatch, { id: post._id, userName });
   };
 
   const getLikedStyle = () => {
     if (!isAuthenticated) return { display: "none" };
-    if (post.likes.includes(userName)) return { color: "green" };
+    if (post.likes.includes(userName)) return { color: "green", fill: "green" };
     else return {};
   };
 
   return (
-    <Card>
-      <CardHeader
-        avatar={<Avatar>{post.userName[0]}</Avatar>}
-        title={post.title}
-        subheader={
-          <Link to={`/user/profile/${post.userName}`}>{post.userName}</Link>
-        }
-        onClick={toggleExpand}
-      />
-      <p>
-        <small>{timeAgo.format(post.date)}</small>
-      </p>
-      <Collapse onClick={() => setExpand(false)} in={expand}>
-        <CardContent className={classes.bodyStyle}>{post.body}</CardContent>
-      </Collapse>
-      <CardActions>
-        <Button
-          style={getLikedStyle()}
-          onClick={handleLike}
-          size="small"
-          color="inherit"
-        >
-          like {post.likes.length}
-        </Button>
+    <Grid className={classes.root} spacing={2} container direction="row">
+      <Grid onClick={handleLike} item>
+        <FavoriteIcon style={getLikedStyle()} />
+        <Typography align="center">{post.likes.length}</Typography>
+      </Grid>
+      <Grid item>
         <Link to={`/comments/${post._id}`}>
-          <Button size="small" color="inherit">
-            comments({post.numOfComments})
-          </Button>
+          <Typography className={classes.title} variant="h6">
+            {post.title}
+          </Typography>
         </Link>
-        <Delete typeToDelete="post" userName={post.userName} id={post._id} />
-      </CardActions>
-    </Card>
+        <Typography variant="caption">
+          {`posted ${timeAgo.format(post.date)} by `}{" "}
+          <Link to={`/user/profile/${post.userName}`}>{post.userName}</Link>
+        </Typography>
+        <Grid item container spacing={2}>
+          <Grid item>
+            <Typography variant="caption">
+              <Link
+                to={`/comments/${post._id}`}
+              >{`    Comments(${post.numOfComments})`}</Link>
+            </Typography>
+          </Grid>
+        </Grid>
+        <Collapse onClick={() => setExpand(false)} in={expand}>
+          <CardContent className={classes.bodyStyle}>{post.body}</CardContent>
+        </Collapse>
+      </Grid>
+    </Grid>
   );
 };
 

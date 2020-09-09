@@ -3,9 +3,8 @@ import {
   ADD_COMMENT,
   DELETE_COMMENT,
   LIKE_COMMENT,
+  LIKE_POST_AND_COMMENTS,
 } from "../actions/types";
-import axios from "axios";
-import { CardActions } from "@material-ui/core";
 
 const INITIAL_STATE = {};
 
@@ -37,6 +36,13 @@ export default (state = INITIAL_STATE, action) => {
       const newState = state;
       newState.comments = newComments;
       return { ...newState };
+    }
+
+    case LIKE_POST_AND_COMMENTS: {
+      return {
+        ...state,
+        likes: action.payload.likes,
+      };
     }
 
     default:

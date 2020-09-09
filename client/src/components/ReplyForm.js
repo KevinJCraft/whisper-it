@@ -8,6 +8,10 @@ const useStyles = makeStyles((theme) => ({
   replyField: {
     width: "100%",
   },
+  button: {
+    float: "right",
+    margin: ".3rem",
+  },
 }));
 
 const ReplyForm = ({ parentDepth, setExpand, parentType, parentId, OPid }) => {
@@ -38,7 +42,7 @@ const ReplyForm = ({ parentDepth, setExpand, parentType, parentId, OPid }) => {
   return (
     <Grid container justify="center">
       <Grid item xs={10}>
-        <form>
+        <form onSubmit={handleSubmitComment}>
           <TextField
             className={classes.replyfield}
             label="reply"
@@ -49,8 +53,13 @@ const ReplyForm = ({ parentDepth, setExpand, parentType, parentId, OPid }) => {
             onChange={handleChange}
             variant="outlined"
           />
-          <Button type="submit" onClick={handleSubmitComment}>
-            Submit
+          <Button
+            className={classes.button}
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
+            Reply
           </Button>
         </form>
       </Grid>

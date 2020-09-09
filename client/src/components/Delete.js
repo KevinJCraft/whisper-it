@@ -12,8 +12,10 @@ const useStyles = makeStyles((theme) => ({
     left: "50%",
     top: "20%",
     transform: "translate(-50%, -20%)",
-    width: "100%",
+    width: "85vw",
     maxWidth: "400px",
+    Height: "80vh",
+    maxHeight: "600px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -62,7 +64,8 @@ const Delete = ({ typeToDelete, userName, id }) => {
       <Button
         style={getButtonVisibility()}
         onClick={() => setModal(true)}
-        color="inherit"
+        color="secondary"
+        size="small"
       >
         Delete
       </Button>

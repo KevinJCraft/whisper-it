@@ -12,9 +12,9 @@ const validateForm = (values, oldErrors = {}, name) => {
 
   if (name === "userName" || name === "submit") {
     if (!values.userName) {
-      errors.userName = "*Required";
+      errors.userName = "required";
     } else if (values.userName.length < 4) {
-      errors.userName = "*Name must be a minimum of 4 characters";
+      errors.userName = "min 4 characters";
     } else {
       delete errors.userName;
     }
@@ -22,13 +22,13 @@ const validateForm = (values, oldErrors = {}, name) => {
 
   if (name === "password" || name === "submit") {
     if (!values.password) {
-      errors.password = "*Required";
+      errors.password = "required";
     } else if (values.password.length < 4) {
-      errors.password = "*password must be a minimum of 4 characters";
+      errors.password = "*min 4 characters";
     } else {
       delete errors.password;
     }
-    if (values.dupPassword && values.dupPassword != values.password) {
+    if (values.dupPassword && values.dupPassword !== values.password) {
       errors.dupPassword = "does not match";
     } else {
       delete errors.dupPassword;
@@ -36,10 +36,10 @@ const validateForm = (values, oldErrors = {}, name) => {
   }
   if (name === "dupPassword" || name === "submit") {
     if (!values.dupPassword) {
-      errors.dupPassword = "*Required";
+      errors.dupPassword = "required";
     } else if (values.dupPassword.length < 4) {
-      errors.dupPassword = "*password must be a minimum of 4 characters";
-    } else if (values.dupPassword && values.dupPassword != values.password) {
+      errors.dupPassword = "min 4 characters";
+    } else if (values.dupPassword && values.dupPassword !== values.password) {
       errors.dupPassword = "does not match";
     } else {
       delete errors.dupPassword;

@@ -1,10 +1,4 @@
-import {
-  GET_POSTS,
-  ADD_POST,
-  GET_COMMENTS,
-  DELETE_POST,
-  GET_ERRORS,
-} from "./types";
+import { GET_POSTS, ADD_POST, LIKE_POST } from "./types";
 import axios from "axios";
 
 export const getPosts = (dispatch) => {
@@ -27,7 +21,10 @@ export const addPost = (dispatch, post) => {
 
 export const likePost = (dispatch, data) => {
   axios.put(`/api/posts/like`, data).then((res) => {
-    getPosts(dispatch);
+    dispatch({
+      type: LIKE_POST,
+      payload: res.data,
+    });
   });
 };
 

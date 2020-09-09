@@ -62,22 +62,20 @@ router.delete("/delete/:id", (req, res) => {
 // @route PUT api/posts/like
 // @desc Like a post
 // @access Public
-router.put("/like", (req, res) => {
-  Post.findById(req.body.id)
-    .then((post) => {
-      const userName = req.body.userName;
-      const userIndex = post.likes.indexOf(userName);
-      const newLikes = [...post.likes];
-      if (userIndex === -1) {
-        newLikes.push(userName);
-      } else {
-        newLikes.splice(userIndex, 1);
-      }
-      post
-        .updateOne({ $set: { likes: newLikes } })
-        .then((response) => res.json({ success: true }));
-    })
-    .catch((err) => res.status(404).json({ success: false }));
+router.put("/like", async (req, res) => {
+  try {
+    const post = await Post.findById(req.body.id);
+    const userIndex = post.likes.indexOf(req.body.userName);
+    if (userIndex === -1) {
+      post.likes.push(req.body.userName);
+    } else {
+      post.likes.splice(userIndex, 1);
+    }
+    const newPost = await post.save();
+    res.json(newPost);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 module.exports = router;

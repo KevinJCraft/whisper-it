@@ -15,8 +15,9 @@ const useStyles = makeStyles((theme) => ({
     top: "20%",
     transform: "translate(-50%, -20%)",
     width: "90%",
-    height: "85vh",
     maxWidth: "400px",
+    height: "85vh",
+    maxHeight: "600px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -46,7 +47,7 @@ const INITIAL_STATE = {
 };
 
 const Register = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const error = useSelector((state) => state.error);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -57,13 +58,12 @@ const Register = () => {
     values,
     setValues,
     errors,
-    isSubmitting,
-    setSubmitting,
   } = useFormValidation(INITIAL_STATE, tryRegister);
 
   const handleClose = () => {
     clearErrors(dispatch);
     setValues(INITIAL_STATE);
+    setOpen(false);
   };
 
   function tryRegister() {
@@ -79,7 +79,7 @@ const Register = () => {
       <Button onClick={() => setOpen(true)} color="inherit">
         Register
       </Button>
-      <Modal open={true} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose}>
         <Paper className={classes.registerModal}>
           <AccountCircleIcon className={classes.icon} />
           <form onSubmit={handleSubmit} className={classes.form}>
@@ -95,7 +95,6 @@ const Register = () => {
               error={errors.userName ? true : false}
               helperText={errors.userName}
             />
-            {console.log(errors)}
             <TextField
               onChange={handleChange}
               id="password"

@@ -10,7 +10,7 @@ const ViewProfile = () => {
 
   useEffect(() => {
     getUserProfile(dispatch, name);
-  }, []);
+  }, [dispatch, name]);
   return (
     <>
       <h1>{profile.profileName}</h1>
