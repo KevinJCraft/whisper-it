@@ -6,14 +6,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../actions/authActions";
 import { clearErrors } from "../../actions/errorActions";
 import Alert from "@material-ui/lab/Alert";
+import useFormValidation from "../../hooks/useFormValidation/useFormValidation";
 
 const useStyles = makeStyles((theme) => ({
-  loginModal: {
+  registerModal: {
     position: "absolute",
     left: "50%",
     top: "20%",
     transform: "translate(-50%, -20%)",
-    width: "100%",
+    width: "90%",
+    height: "85vh",
     maxWidth: "400px",
     display: "flex",
     flexDirection: "column",
@@ -22,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "3rem 1rem",
   },
   icon: {
-    fontSize: "15rem",
+    fontSize: "7rem",
     fill: "#3f51b5",
   },
   form: {
@@ -38,78 +40,88 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const INITIAL_STATE = {
-  open: false,
   userName: "",
   password: "",
   dupPassword: "",
-  msg: null,
 };
 
 const Register = () => {
-  const [state, setState] = useState(INITIAL_STATE);
+  const [open, setOpen] = useState(true);
   const error = useSelector((state) => state.error);
   const dispatch = useDispatch();
-
   const classes = useStyles();
+  const {
+    handleSubmit,
+    handleChange,
+    handleBlur,
+    values,
+    setValues,
+    errors,
+    isSubmitting,
+    setSubmitting,
+  } = useFormValidation(INITIAL_STATE, tryRegister);
 
   const handleClose = () => {
     clearErrors(dispatch);
-    setState(INITIAL_STATE);
+    setValues(INITIAL_STATE);
   };
 
-  const handleChange = (e) => {
-    if (e.target.value.length < 15) {
-      setState({ ...state, [e.target.id]: e.target.value });
-    }
-  };
-
-  const onSubmit = (e) => {
-    e.preventDefault();
+  function tryRegister() {
     const newUser = {
-      userName: state.userName,
-      password: state.password,
+      userName: values.userName,
+      password: values.password,
     };
     register(dispatch, newUser);
-  };
+  }
 
   return (
     <>
-      <Button
-        onClick={() => setState({ ...state, open: true })}
-        color="inherit"
-      >
+      <Button onClick={() => setOpen(true)} color="inherit">
         Register
       </Button>
-      <Modal open={state.open} onClose={handleClose}>
-        <Paper className={classes.loginModal}>
+      <Modal open={true} onClose={handleClose}>
+        <Paper className={classes.registerModal}>
           <AccountCircleIcon className={classes.icon} />
-          <form onSubmit={onSubmit} className={classes.form}>
+          <form onSubmit={handleSubmit} className={classes.form}>
             <TextField
               onChange={handleChange}
               id="userName"
+              name="user name"
               type="text"
               label="User Name"
-              value={state.userName}
+              value={values.userName}
               className={classes.formItem}
+              onBlur={handleBlur}
+              error={errors.userName ? true : false}
+              helperText={errors.userName}
             />
+            {console.log(errors)}
             <TextField
               onChange={handleChange}
               id="password"
+              name="password"
               type="password"
               label="Password"
-              value={state.password}
+              value={values.password}
               className={classes.formItem}
+              onBlur={handleBlur}
+              error={errors.password ? true : false}
+              helperText={errors.password}
             />
             <TextField
               onChange={handleChange}
               id="dupPassword"
+              name="password"
               type="password"
               label="Re-enter Password"
-              value={state.dupPassword}
+              value={values.dupPassword}
               className={classes.formItem}
+              onBlur={handleBlur}
+              error={errors.dupPassword ? true : false}
+              helperText={errors.dupPassword}
             />
             <Button type="submit" variant="contained" color="primary">
-              Login
+              Register
             </Button>
           </form>
           {error.id === "REGISTER_FAIL" && (
