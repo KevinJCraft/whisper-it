@@ -18,12 +18,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
   },
-  title: {
-    textDecoration: "none",
-  },
   bodyStyle: {
     paddingLeft: "4rem",
     overflowWrap: "break-word",
+  },
+  iconSide: {
+    padding: ".5rem",
+  },
+  postSide: {
+    padding: ".5rem",
   },
 }));
 
@@ -46,12 +49,20 @@ const Post = ({ post }) => {
   };
 
   return (
-    <Grid className={classes.root} spacing={2} container direction="row">
-      <Grid onClick={handleLike} item>
+    <Grid className={classes.root} container direction="row">
+      <Grid
+        className={classes.iconSide}
+        onClick={handleLike}
+        item
+        container
+        justify="center"
+        alignItems="center"
+        xs={2}
+      >
         <FavoriteIcon style={getLikedStyle()} />
         <Typography align="center">{post.likes.length}</Typography>
       </Grid>
-      <Grid item>
+      <Grid xs={10} className={classes.postSide} item>
         <Link to={`/comments/${post._id}`}>
           <Typography className={classes.title} variant="h6">
             {post.title}

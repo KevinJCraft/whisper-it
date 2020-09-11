@@ -1,37 +1,56 @@
 import React, { useState } from "react";
-import {
-  Card,
-  CardHeader,
-  Avatar,
-  Collapse,
-  Button,
-  CardActions,
-} from "@material-ui/core";
+import { Collapse, Grid, Typography, Link, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
-import Delete from "./Delete";
+import DeleteModal from "./DeleteModal";
 import ReplyForm from "./ReplyForm";
 import { likeComment } from "../actions/commentActions";
 
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
+TimeAgo.addLocale(en);
+
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingLeft: "1rem",
+    maxWidth: "100%",
+    borderLeft: "2px lightgrey solid",
+    flexWrap: "none",
   },
+  commentSide: {
+    padding: ".5rem",
+    flexGrow: "1",
+  },
+  iconSide: {
+    width: "20px",
+  },
+
   bodyStyle: {
     paddingLeft: "4rem",
+    overflowWrap: "break-word",
+  },
+  postedData: {
     overflowWrap: "break-word",
   },
 }));
 
 const Comment = ({ comment, OPid }) => {
-  const [expand, setExpand] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [replyModal, setReplyModal] = useState(false);
+
   const classes = useStyles();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const userName = useSelector((state) => state.auth.user.userName);
+  const timeAgo = new TimeAgo("en-US");
 
-  const toggleExpand = () => {
-    setExpand(!expand);
+  const toggleReplyModal = () => {
+    setReplyModal(!replyModal);
+  };
+
+  const getButtonVisibility = () => {
+    if (userName === comment.userName)
+      return { display: "inline", marginLeft: ".5rem" };
+    else return { display: "none" };
   };
 
   const handleLikeComment = () => {
@@ -39,60 +58,80 @@ const Comment = ({ comment, OPid }) => {
   };
 
   const getLikedStyle = () => {
-    if (!isAuthenticated) return { display: "none" };
-    if (comment.likes.includes(userName)) return { color: "green" };
+    if (!isAuthenticated) return { display: "inline" };
+    if (comment.likes.includes(userName))
+      return { color: "green", marginLeft: ".5rem" };
     else return {};
   };
 
   const getReplyStyle = () => {
     if (!isAuthenticated) return { display: "none" };
-    else return { display: "block" };
+    else return { display: "inline", color: "blue", marginLeft: ".5rem" };
   };
 
   return (
     <>
-      <Card className={classes.root}>
-        <CardHeader
-          avatar={<Avatar>{comment.userName[0]}</Avatar>}
-          title={comment.body}
-          subheader={comment.userName}
-        />
-        <Collapse in={expand}>
-          <ReplyForm
-            setExpand={setExpand}
-            OPid={OPid}
-            parentType="comment"
-            parentId={comment._id}
-            parentDepth={comment.depth}
-          />
-        </Collapse>
-        <CardActions>
-          <Button
-            style={getLikedStyle()}
-            onClick={handleLikeComment}
-            size="small"
-            color="inherit"
-          >
-            like {comment.likes.length}
-          </Button>
-          <Button
-            style={getReplyStyle()}
-            onClick={toggleExpand}
-            size="small"
-            color="inherit"
-          >
-            reply
-          </Button>
-          <Delete
-            typeToDelete="comment"
-            userName={comment.userName}
-            id={comment._id}
-          />
-        </CardActions>
+      <Grid className={classes.root} container>
+        <Grid xs={12} item className={classes.commentSide}>
+          <Typography variant="caption" className={classes.postedData}>
+            <Link to={`/user/profile/${comment.userName}`}>
+              {comment.userName}
+            </Link>{" "}
+            {`${timeAgo.format(comment.date)}`}
+          </Typography>
+          <Typography className={classes.body} variant="body1">
+            {comment.body}
+          </Typography>
+
+          <Grid item container>
+            <Grid item>
+              <Typography
+                style={getLikedStyle()}
+                onClick={handleLikeComment}
+                variant="caption"
+              >
+                {`like(${comment.likes.length})`}
+              </Typography>
+              <Typography
+                style={getReplyStyle()}
+                onClick={toggleReplyModal}
+                variant="caption"
+              >
+                {`reply(${comment.comments.length})`}
+              </Typography>
+              <Typography
+                style={getButtonVisibility()}
+                onClick={() => setDeleteModal(true)}
+                color="secondary"
+                variant="caption"
+              >
+                delete
+              </Typography>
+              <Collapse in={replyModal}>
+                <ReplyForm
+                  OPid={comment.OPid}
+                  parentType="comment"
+                  parentId={comment._id}
+                  parentDepth={comment.depth}
+                  setExpand={setReplyModal}
+                />
+              </Collapse>
+              <DeleteModal
+                typeToDelete="comment"
+                userName={comment.userName}
+                id={comment._id}
+                modal={deleteModal}
+                setModal={setDeleteModal}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
         {comment.comments.map((comment, index) => (
-          <Comment OPid={OPid} key={index} comment={comment} />
+          <Box key={index} style={{ paddingLeft: "1rem" }}>
+            <Comment OPid={OPid} comment={comment} />
+          </Box>
         ))}
-      </Card>
+      </Grid>
     </>
   );
 };

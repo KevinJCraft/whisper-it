@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Modal, Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { deletePost } from "../actions/postActions";
 import { deleteComment } from "../actions/commentActions";
 
@@ -38,12 +38,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Delete = ({ typeToDelete, userName, id }) => {
-  const [modal, setModal] = useState(false);
-  const currentUserName = useSelector((state) => state.auth.user.userName);
+const DeleteModal = ({ typeToDelete, modal, setModal, userName, id }) => {
   const dispatch = useDispatch();
-
   const classes = useStyles();
+
   const handleClose = () => {
     setModal(false);
   };
@@ -54,21 +52,8 @@ const Delete = ({ typeToDelete, userName, id }) => {
     setModal(false);
   };
 
-  const getButtonVisibility = () => {
-    if (userName === currentUserName) return { display: "block" };
-    else return { display: "none" };
-  };
-
   return (
     <>
-      <Button
-        style={getButtonVisibility()}
-        onClick={() => setModal(true)}
-        color="secondary"
-        size="small"
-      >
-        Delete
-      </Button>
       <Modal open={modal} onClose={handleClose}>
         <Paper className={classes.loginModal}>
           <DeleteIcon className={classes.icon} />
@@ -83,4 +68,4 @@ const Delete = ({ typeToDelete, userName, id }) => {
   );
 };
 
-export default Delete;
+export default DeleteModal;

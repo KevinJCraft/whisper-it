@@ -1,20 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostAndComments, likePost } from "../actions/commentActions";
 import Comment from "./Comment";
 import ReplyForm from "./ReplyForm";
-import { Grid, Typography, Link, makeStyles } from "@material-ui/core";
+import { Grid, Typography, Link, makeStyles, Box } from "@material-ui/core";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
-import Delete from "./Delete";
+import DeleteModal from "./DeleteModal";
 
 TimeAgo.addLocale(en);
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: "1rem 1rem 0 1rem",
+  },
+  iconSide: {
+    padding: ".5rem",
+  },
+  postSide: {
+    padding: ".5rem",
+    flexGrow: 1,
   },
   title: {
     textDecoration: "none",
@@ -29,9 +36,14 @@ const useStyles = makeStyles((theme) => ({
     padding: "1.2rem",
     borderRadius: "5px",
   },
+  commentsBox: {
+    width: "100%",
+    overFlow: "none",
+  },
 }));
 
 const ViewPost = () => {
+  const [modal, setModal] = useState(false);
   const { id } = useParams();
   const post = useSelector((state) => state.postAndComments);
   const isAuthenticated = useSelector((state) => state.auth);
@@ -50,6 +62,11 @@ const ViewPost = () => {
     likePost(dispatch, { id: post._id, userName });
   };
 
+  const getButtonVisibility = () => {
+    if (userName === post.userName) return { display: "inline" };
+    else return { display: "none" };
+  };
+
   useEffect(() => {
     getPostAndComments(dispatch, id);
   }, [dispatch, id]);
@@ -57,14 +74,14 @@ const ViewPost = () => {
     <>
       {post.title ? (
         <>
-          <Grid className={classes.root} spacing={2} container direction="row">
-            <Grid item>
+          <Grid className={classes.root} container direction="row">
+            <Grid className={classes.iconSide} item>
               <Grid onClick={handleLike} item>
                 <FavoriteIcon style={getLikedStyle()} />
                 <Typography align="center">{post.likes?.length}</Typography>
               </Grid>
             </Grid>
-            <Grid className={classes.postTitleContainer} item>
+            <Grid className={classes.postSide} item>
               <Typography variant="h6">{post?.title}</Typography>
               <Grid container justify="space-between">
                 <Typography variant="caption">
@@ -73,10 +90,21 @@ const ViewPost = () => {
                     {post.userName}
                   </Link>
                 </Typography>
-                <Delete
+                <Typography
+                  style={getButtonVisibility()}
+                  onClick={() => setModal(true)}
+                  color="secondary"
+                  variant="caption"
+                >
+                  delete
+                </Typography>
+
+                <DeleteModal
                   typeToDelete="post"
                   userName={post.userName}
                   id={post._id}
+                  modal={modal}
+                  setModal={setModal}
                 />
               </Grid>
               <br></br>
@@ -93,7 +121,9 @@ const ViewPost = () => {
           />
           <h4>comments ({post?.numOfComments})</h4>
           {post.comments?.map((comment, index) => (
-            <Comment key={index} comment={comment} OPid={id} />
+            <Box className={classes.commentsBox} key={index}>
+              <Comment comment={comment} OPid={id} />
+            </Box>
           ))}
         </>
       ) : (
