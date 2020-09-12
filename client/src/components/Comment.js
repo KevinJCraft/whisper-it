@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Comment = ({ comment, OPid, recursive }) => {
+const Comment = ({ comment, OPid, recursive, maxDepth }) => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [replyModal, setReplyModal] = useState(false);
 
@@ -127,11 +127,28 @@ const Comment = ({ comment, OPid, recursive }) => {
           </Grid>
         </Grid>
         {recursive &&
-          comment.comments.map((comment, index) => (
-            <Box key={index} style={{ paddingLeft: "1rem" }}>
-              <Comment recursive={true} OPid={OPid} comment={comment} />
-            </Box>
-          ))}
+          comment.comments.map((comment, index) => {
+            if (comment.depth < maxDepth) {
+              return (
+                <Box key={index} style={{ paddingLeft: "1rem" }}>
+                  <Comment
+                    recursive={true}
+                    OPid={OPid}
+                    comment={comment}
+                    maxDepth={maxDepth}
+                  />
+                </Box>
+              );
+            } else if (comment.depth === maxDepth) {
+              return (
+                <Typography key={index}>
+                  <Link to={`/comments/extended/${comment._id}`}>
+                    {"...more"}
+                  </Link>
+                </Typography>
+              );
+            } else return null;
+          })}
       </Grid>
     </>
   );

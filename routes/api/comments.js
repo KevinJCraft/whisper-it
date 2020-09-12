@@ -9,7 +9,7 @@ const Post = require("../../models/Post");
 // @des ADD One Comment
 // @access Public
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const newComment = new Comment({
     userName: req.body.userName,
     body: req.body.body,
@@ -17,6 +17,7 @@ router.post("/", async (req, res) => {
     parentType: req.body.parentType,
     parentId: req.body.parentId,
     depth: req.body.parentDepth + 1,
+    likes: [req.body.userName],
   });
   newComment.save();
 
@@ -51,7 +52,7 @@ router.post("/", async (req, res) => {
 // @des Delete (remove content) One Comment
 // @access Public
 
-router.put("/delete/:id", (req, res) => {
+router.put("/delete/:id", auth, (req, res) => {
   const id = req.params.id;
   Comment.findById(id)
     .then((comment) => {
@@ -69,7 +70,7 @@ router.put("/delete/:id", (req, res) => {
 // @des Like One Comment
 // @access Public
 
-router.put("/like", (req, res) => {
+router.put("/like", auth, (req, res) => {
   Comment.findById(req.body.id)
     .then((comment) => {
       const userName = req.body.userName;
@@ -84,6 +85,13 @@ router.put("/like", (req, res) => {
       comment.save().then((updatedComment) => res.json(updatedComment));
     })
     .catch((err) => res.status(404).json({ success: false }));
+});
+
+router.get("/:id", async (req, res) => {
+  Comment.findById(req.params.id)
+    .populate("comments")
+    .then((posts) => res.json(posts))
+    .catch((err) => res.status(404).json({ msg: "message not found" }));
 });
 
 module.exports = router;

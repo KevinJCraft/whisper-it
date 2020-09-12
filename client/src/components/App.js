@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import store from "../store";
 import ViewPost from "./ViewPost";
 import ViewProfile from "./ViewProfile";
+import ViewExtendedComments from "./ViewExtendedComments";
 
 function App() {
   useEffect(() => {
@@ -26,11 +27,14 @@ function App() {
             <Route path="/create">
               <CreatePost />
             </Route>
-            <Route path="/comments/:id">
+            <Route exact path="/comments/:id">
               <ViewPost />
             </Route>
             <Route path="/user/profile/:name">
               <ViewProfile />
+            </Route>
+            <Route exact path="/comments/extended/:id">
+              <ViewExtendedComments />
             </Route>
           </Switch>
         </Router>

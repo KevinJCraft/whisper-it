@@ -30,7 +30,7 @@ router.get("/one/:id", (req, res) => {
 // @route Post api/posts
 // @desc Post a post
 // @access Private
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const newPost = new Post({
     userName: req.body.userName,
     title: req.body.title,
@@ -52,7 +52,7 @@ router.post("/", async (req, res) => {
 // @route DELETE api/posts/delete
 // @desc DELETE a post
 // @access Private
-router.delete("/delete/:id", (req, res) => {
+router.delete("/delete/:id", auth, (req, res) => {
   const id = req.params.id;
   Post.findById(id)
     .then((post) => post.remove().then(() => res.json({ success: true })))
@@ -62,7 +62,7 @@ router.delete("/delete/:id", (req, res) => {
 // @route PUT api/posts/like
 // @desc Like a post
 // @access Public
-router.put("/like", async (req, res) => {
+router.put("/like", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.body.id);
     const userIndex = post.likes.indexOf(req.body.userName);

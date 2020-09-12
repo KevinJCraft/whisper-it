@@ -47,7 +47,7 @@ const ViewPost = () => {
   const [modal, setModal] = useState(false);
   const { id } = useParams();
   const post = useSelector((state) => state.postAndComments);
-  const isAuthenticated = useSelector((state) => state.auth);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const userName = useSelector((state) => state.auth.user.userName);
   const dispatch = useDispatch();
   const timeAgo = new TimeAgo("en-US");
@@ -121,16 +121,23 @@ const ViewPost = () => {
           <Typography className={classes.postBody} variant="subtitle1">
             {post?.body}
           </Typography>
-          <ReplyForm
-            OPid={id}
-            parentType="post"
-            parentId={id}
-            parentDepth={0}
-          />
+          {isAuthenticated ? (
+            <ReplyForm
+              OPid={id}
+              parentType="post"
+              parentId={id}
+              parentDepth={0}
+            />
+          ) : null}
           <h4>comments ({post?.numOfComments})</h4>
           {post.comments?.map((comment, index) => (
             <Box className={classes.commentsBox} key={index}>
-              <Comment recursive={true} comment={comment} OPid={id} />
+              <Comment
+                recursive={true}
+                comment={comment}
+                OPid={id}
+                maxDepth={5}
+              />
             </Box>
           ))}
         </>

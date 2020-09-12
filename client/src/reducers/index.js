@@ -4,6 +4,7 @@ import errorReducer from "./errorReducer";
 import authReuducer from "./authReducer";
 import postAndCommentsReducer from "./postAndCommentsReducer";
 import profileReducer from "./profileReducer";
+import extendedCommentReducer from "./extendedCommentReducer";
 
 export default combineReducers({
   posts: postReducer,
@@ -11,4 +12,5 @@ export default combineReducers({
   auth: authReuducer,
   postAndComments: postAndCommentsReducer,
   profile: profileReducer,
+  extendedComment: extendedCommentReducer,
 });

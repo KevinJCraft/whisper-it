@@ -11,7 +11,6 @@ import {
   REGISTER_FAIL,
   REGISER_SUCCESS,
 } from "./types";
-console.log("pro: ", process.env.NODE_ENV);
 if (process.env.NODE_ENV !== "production") {
   axios.defaults.baseURL = "http://localhost:3000/";
 }
