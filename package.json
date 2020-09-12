@@ -12,7 +12,6 @@
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "dependencies": {
-    "@material-ui/lab": "^4.0.0-alpha.56",
     "bcryptjs": "^2.4.3",
     "concurrently": "^5.3.0",
     "config": "^3.3.1",
