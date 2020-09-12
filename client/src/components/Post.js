@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
-import FavoriteIcon from "@material-ui/icons/Favorite";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 TimeAgo.addLocale(en);
 
 const useStyles = makeStyles((theme) => ({
@@ -57,9 +57,10 @@ const Post = ({ post }) => {
         container
         justify="center"
         alignItems="center"
+        direction="column"
         xs={2}
       >
-        <FavoriteIcon style={getLikedStyle()} />
+        <ArrowDropUpIcon fontSize="large" style={getLikedStyle()} />
         <Typography align="center">{post.likes.length}</Typography>
       </Grid>
       <Grid xs={10} className={classes.postSide} item>

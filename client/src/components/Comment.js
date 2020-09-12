@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Collapse, Grid, Typography, Link, Box } from "@material-ui/core";
+import { Collapse, Grid, Typography, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
 import DeleteModal from "./DeleteModal";
 import ReplyForm from "./ReplyForm";
 import { likeComment } from "../actions/commentActions";
+import { Link } from "react-router-dom";
 
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
@@ -33,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Comment = ({ comment, OPid }) => {
+const Comment = ({ comment, OPid, recursive }) => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [replyModal, setReplyModal] = useState(false);
 
@@ -59,8 +60,7 @@ const Comment = ({ comment, OPid }) => {
 
   const getLikedStyle = () => {
     if (!isAuthenticated) return { display: "inline" };
-    if (comment.likes.includes(userName))
-      return { color: "green", marginLeft: ".5rem" };
+    if (comment.likes.includes(userName)) return { color: "green" };
     else return {};
   };
 
@@ -126,11 +126,12 @@ const Comment = ({ comment, OPid }) => {
             </Grid>
           </Grid>
         </Grid>
-        {comment.comments.map((comment, index) => (
-          <Box key={index} style={{ paddingLeft: "1rem" }}>
-            <Comment OPid={OPid} comment={comment} />
-          </Box>
-        ))}
+        {recursive &&
+          comment.comments.map((comment, index) => (
+            <Box key={index} style={{ paddingLeft: "1rem" }}>
+              <Comment recursive={true} OPid={OPid} comment={comment} />
+            </Box>
+          ))}
       </Grid>
     </>
   );

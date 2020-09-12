@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostAndComments, likePost } from "../actions/commentActions";
 import Comment from "./Comment";
 import ReplyForm from "./ReplyForm";
-import { Grid, Typography, Link, makeStyles, Box } from "@material-ui/core";
-import FavoriteIcon from "@material-ui/icons/Favorite";
+import { Grid, Typography, makeStyles, Box } from "@material-ui/core";
+import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import DeleteModal from "./DeleteModal";
@@ -76,8 +77,15 @@ const ViewPost = () => {
         <>
           <Grid className={classes.root} container direction="row">
             <Grid className={classes.iconSide} item>
-              <Grid onClick={handleLike} item>
-                <FavoriteIcon style={getLikedStyle()} />
+              <Grid
+                onClick={handleLike}
+                item
+                container
+                justify="center"
+                alignItems="center"
+                direction="column"
+              >
+                <ArrowDropUpIcon fontSize="large" style={getLikedStyle()} />
                 <Typography align="center">{post.likes?.length}</Typography>
               </Grid>
             </Grid>
@@ -122,7 +130,7 @@ const ViewPost = () => {
           <h4>comments ({post?.numOfComments})</h4>
           {post.comments?.map((comment, index) => (
             <Box className={classes.commentsBox} key={index}>
-              <Comment comment={comment} OPid={id} />
+              <Comment recursive={true} comment={comment} OPid={id} />
             </Box>
           ))}
         </>

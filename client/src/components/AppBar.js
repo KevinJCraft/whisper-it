@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    color: "white",
   },
   welcomeMessage: {
     paddingRight: "3rem",
@@ -62,9 +64,11 @@ export default function AppBarHeader() {
       <CssBaseline />
       <AppBar position="static">
         <Toolbar className={classes.appBarContainer}>
-          <Typography variant="h6" className={classes.title}>
-            Whisper-it
-          </Typography>
+          <Link to={"/"}>
+            <Typography variant="h6" className={classes.title}>
+              Whisper-it
+            </Typography>
+          </Link>
 
           {displayAuthOptions()}
         </Toolbar>
