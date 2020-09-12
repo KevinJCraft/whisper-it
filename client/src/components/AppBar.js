@@ -64,11 +64,11 @@ export default function AppBarHeader() {
       <CssBaseline />
       <AppBar position="static">
         <Toolbar className={classes.appBarContainer}>
-          <Link to={"/"}>
-            <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6" className={classes.title}>
+            <Link style={{ color: "white" }} to={"/"}>
               Whisper-it
-            </Typography>
-          </Link>
+            </Link>
+          </Typography>
 
           {displayAuthOptions()}
         </Toolbar>
