@@ -22,7 +22,7 @@ export const loadUser = (dispatch) => {
   dispatch({ type: USER_LOADING });
 
   axios
-    .get("api/auth/user", tokenConfig())
+    .get("/api/auth/user", tokenConfig())
     .then((res) =>
       dispatch({
         type: USER_LOADED,
@@ -39,7 +39,7 @@ export const loadUser = (dispatch) => {
 export const register = (dispatch, { userName, password }) => {
   const body = JSON.stringify({ userName, password });
   axios
-    .post("api/users", body, tokenConfig())
+    .post("/api/users", body, tokenConfig())
     .then((res) => {
       dispatch({
         type: REGISER_SUCCESS,
@@ -68,7 +68,7 @@ export const logOut = (dispatch) => {
 export const login = (dispatch, { userName, password }) => {
   const body = JSON.stringify({ userName, password });
   axios
-    .post("api/auth", body, tokenConfig())
+    .post("/api/auth", body, tokenConfig())
     .then((res) => {
       dispatch({
         type: LOGIN_SUCCESS,
