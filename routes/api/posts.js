@@ -9,9 +9,12 @@ const User = require("../../models/User");
 // @route GET api/posts
 // @desc Get All posts
 // @access Public
-router.get("/", (req, res) => {
+router.get("/:sort", (req, res) => {
+  const type = req.params.sort;
+  let sort;
+  if (type === "new") sort = { date: -1 };
   Post.find()
-    .sort({ date: -1 })
+    .sort(sort)
     .then((posts) => res.json(posts))
     .catch((err) => res.json());
 });

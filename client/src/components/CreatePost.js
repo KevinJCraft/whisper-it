@@ -7,6 +7,12 @@ import { addPost } from "../actions/postActions";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    minHeight: "70vh",
+  },
+  formContainer: {
+    maxWidth: "600px",
+  },
   icon: {
     fontSize: "15rem",
     fill: "#3f51b5",
@@ -16,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
     display: "flex",
     flexDirection: "column",
-    padding: theme.spacing(2),
   },
   formItem: {
     marginBottom: "1rem",
@@ -37,7 +42,12 @@ const CreatePost = () => {
   const classes = useStyles();
 
   const handleChange = (e) => {
-    setState({ ...state, [e.target.id]: e.target.value });
+    let maxLength;
+    if (e.target.id === "body") maxLength = 1000;
+    if (e.target.id === "title") maxLength = 250;
+    if (e.target.value.length <= maxLength) {
+      setState({ ...state, [e.target.id]: e.target.value });
+    }
   };
 
   const onSubmit = (e) => {
@@ -52,31 +62,46 @@ const CreatePost = () => {
     history.push("/");
   };
   return (
-    <Grid container justify="center" alignItems="center">
-      <ChatIcon className={classes.icon} />
-      <form onSubmit={onSubmit} className={classes.form}>
-        <TextField
-          onChange={handleChange}
-          id="title"
-          type="text"
-          label="Title"
-          value={state.title}
-          className={classes.formItem}
-        />
-        <TextField
-          onChange={handleChange}
-          id="body"
-          label="Message"
-          value={state.body}
-          className={classes.formItem}
-          multiline
-          rows={4}
-        />
+    <Grid
+      className={classes.root}
+      container
+      justify="center"
+      alignItems="center"
+    >
+      <Grid
+        item
+        className={classes.formContainer}
+        container
+        justify="center"
+        alignItems="center"
+      >
+        <ChatIcon className={classes.icon} />
+        <form onSubmit={onSubmit} className={classes.form}>
+          <TextField
+            onChange={handleChange}
+            id="title"
+            type="text"
+            label="Title"
+            value={state.title}
+            className={classes.formItem}
+            helperText={`${state.title.length}/250`}
+          />
+          <TextField
+            onChange={handleChange}
+            id="body"
+            label="Message"
+            value={state.body}
+            className={classes.formItem}
+            multiline
+            rows={4}
+            helperText={`${state.body.length}/1000`}
+          />
 
-        <Button type="submit" variant="contained" color="primary">
-          Submit
-        </Button>
-      </form>
+          <Button type="submit" variant="contained" color="primary">
+            Submit
+          </Button>
+        </form>
+      </Grid>
     </Grid>
   );
 };

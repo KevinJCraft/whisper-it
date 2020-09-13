@@ -5,8 +5,8 @@ import { useParams } from "react-router-dom";
 import { getUserProfile } from "../actions/userActions";
 import Post from "./Post";
 import Comment from "./Comment";
-import { Typography, Box } from "@material-ui/core";
-
+import { Typography, Box, Grid, CircularProgress } from "@material-ui/core";
+import { CLEAR_PROFILE } from "../actions/types";
 const ViewProfile = () => {
   const dispatch = useDispatch();
   const { name } = useParams();
@@ -14,8 +14,9 @@ const ViewProfile = () => {
 
   useEffect(() => {
     getUserProfile(dispatch, name);
+    return () => dispatch({ type: CLEAR_PROFILE });
   }, [dispatch, name]);
-  return (
+  return profile.profileName ? (
     <>
       <h1>{profile.profileName}</h1>
       <h4>Posts</h4>
@@ -32,6 +33,15 @@ const ViewProfile = () => {
         </Box>
       ))}
     </>
+  ) : (
+    <Grid
+      style={{ minHeight: "80vh" }}
+      container
+      justify="center"
+      alignItems="center"
+    >
+      <CircularProgress />
+    </Grid>
   );
 };
 

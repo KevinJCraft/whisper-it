@@ -4,6 +4,7 @@ import {
   DELETE_COMMENT,
   LIKE_COMMENT,
   LIKE_POST_AND_COMMENTS,
+  CLEAR_POST_AND_COMMENTS,
 } from "../actions/types";
 
 const INITIAL_STATE = {};
@@ -44,6 +45,8 @@ export default (state = INITIAL_STATE, action) => {
         likes: action.payload.likes,
       };
     }
+    case CLEAR_POST_AND_COMMENTS:
+      return {};
 
     default:
       return state;

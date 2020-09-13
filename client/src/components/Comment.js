@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Collapse, Grid, Typography, Box } from "@material-ui/core";
+import { Collapse, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
 import DeleteModal from "./DeleteModal";
@@ -13,18 +13,15 @@ TimeAgo.addLocale(en);
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxWidth: "100%",
     borderLeft: "2px lightgrey solid",
     flexWrap: "none",
+    paddingLeft: "1rem",
+    width: "98%",
+    margtin: "auto",
   },
   commentSide: {
     padding: ".5rem",
-    flexGrow: "1",
   },
-  iconSide: {
-    width: "20px",
-  },
-
   bodyStyle: {
     paddingLeft: "4rem",
     overflowWrap: "break-word",
@@ -130,14 +127,13 @@ const Comment = ({ comment, OPid, recursive, maxDepth }) => {
           comment.comments.map((comment, index) => {
             if (comment.depth < maxDepth) {
               return (
-                <Box key={index} style={{ paddingLeft: "1rem" }}>
-                  <Comment
-                    recursive={true}
-                    OPid={OPid}
-                    comment={comment}
-                    maxDepth={maxDepth}
-                  />
-                </Box>
+                <Comment
+                  recursive={true}
+                  OPid={OPid}
+                  comment={comment}
+                  maxDepth={maxDepth}
+                  key={index}
+                />
               );
             } else if (comment.depth === maxDepth) {
               return (

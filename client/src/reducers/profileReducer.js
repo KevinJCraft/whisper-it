@@ -1,4 +1,4 @@
-import { GET_USER_PROFILE } from "../actions/types";
+import { CLEAR_PROFILE, GET_USER_PROFILE } from "../actions/types";
 
 const INITIAL_STATE = {
   profileName: null,
@@ -15,6 +15,8 @@ export default (state = INITIAL_STATE, action) => {
         posts: action.payload.posts,
         comments: action.payload.comments,
       };
+    case CLEAR_PROFILE:
+      return INITIAL_STATE;
     default:
       return state;
   }

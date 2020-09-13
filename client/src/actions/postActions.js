@@ -1,9 +1,10 @@
 import { GET_POSTS, ADD_POST, LIKE_POST } from "./types";
 import axios from "axios";
 import { tokenConfig } from "./authActions";
+import { createBrowserHistory } from "history";
 
 export const getPosts = (dispatch) => {
-  axios.get("/api/posts").then((res) => {
+  axios.get("/api/posts/new").then((res) => {
     dispatch({
       type: GET_POSTS,
       payload: res.data,
@@ -31,6 +32,7 @@ export const likePost = (dispatch, data) => {
 
 export const deletePost = (dispatch, { id }) => {
   axios.delete(`/api/posts/delete/${id}`, tokenConfig()).then((res) => {
-    getPosts(dispatch);
+    console.log("made it");
+    createBrowserHistory().push("/");
   });
 };

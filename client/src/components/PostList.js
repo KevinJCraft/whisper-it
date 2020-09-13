@@ -1,3 +1,4 @@
+import { CircularProgress, Grid } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPosts } from "../actions/postActions";
@@ -10,7 +11,18 @@ const PostList = () => {
   useEffect(() => {
     getPosts(dispatch);
   }, [dispatch]);
-  return posts.map((post, index) => <Post post={post} key={index} />);
+  return posts ? (
+    posts.map((post, index) => <Post post={post} key={index} />)
+  ) : (
+    <Grid
+      style={{ minHeight: "80vh" }}
+      container
+      justify="center"
+      alignItems="center"
+    >
+      <CircularProgress />
+    </Grid>
+  );
 };
 
 export default PostList;

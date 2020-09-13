@@ -15,18 +15,24 @@ import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 TimeAgo.addLocale(en);
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2),
+  root: {},
+  title: {
+    overflowWrap: "anywhere",
   },
   bodyStyle: {
     paddingLeft: "4rem",
-    overflowWrap: "break-word",
   },
   iconSide: {
     padding: ".5rem",
+    flex: "0 0 15px",
   },
   postSide: {
     padding: ".5rem",
+    maxWidth: "calc(100% - 60px)",
+    flex: "1",
+  },
+  postTitleContainer: {
+    width: "100%",
   },
 }));
 
@@ -49,7 +55,7 @@ const Post = ({ post }) => {
   };
 
   return (
-    <Grid className={classes.root} container direction="row">
+    <Grid container className={classes.root} direction="row">
       <Grid
         className={classes.iconSide}
         onClick={handleLike}
@@ -58,12 +64,11 @@ const Post = ({ post }) => {
         justify="center"
         alignItems="center"
         direction="column"
-        xs={2}
       >
         <ArrowDropUpIcon fontSize="large" style={getLikedStyle()} />
         <Typography align="center">{post.likes.length}</Typography>
       </Grid>
-      <Grid xs={10} className={classes.postSide} item>
+      <Grid className={classes.postSide} item>
         <Link to={`/comments/${post._id}`}>
           <Typography className={classes.title} variant="h6">
             {post.title}
@@ -73,7 +78,7 @@ const Post = ({ post }) => {
           {`posted ${timeAgo.format(post.date)} by `}{" "}
           <Link to={`/user/profile/${post.userName}`}>{post.userName}</Link>
         </Typography>
-        <Grid item container spacing={2}>
+        <Grid item container>
           <Grid item>
             <Typography variant="caption">
               <Link

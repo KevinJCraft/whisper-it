@@ -24,13 +24,13 @@ function App() {
             <Route exact path="/">
               <PostList />
             </Route>
-            <Route path="/create">
+            <Route exact path="/create">
               <CreatePost />
             </Route>
             <Route exact path="/comments/:id">
               <ViewPost />
             </Route>
-            <Route path="/user/profile/:name">
+            <Route exact path="/user/profile/:name">
               <ViewProfile />
             </Route>
             <Route exact path="/comments/extended/:id">

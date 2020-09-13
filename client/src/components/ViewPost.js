@@ -5,11 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPostAndComments, likePost } from "../actions/commentActions";
 import Comment from "./Comment";
 import ReplyForm from "./ReplyForm";
-import { Grid, Typography, makeStyles, Box } from "@material-ui/core";
+import { Grid, Typography, makeStyles } from "@material-ui/core";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import DeleteModal from "./DeleteModal";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { CLEAR_POST_AND_COMMENTS } from "../actions/types";
 
 TimeAgo.addLocale(en);
 
@@ -23,23 +25,25 @@ const useStyles = makeStyles((theme) => ({
   postSide: {
     padding: ".5rem",
     flexGrow: 1,
+    maxWidth: "calc(100% - 60px)",
   },
   title: {
+    display: "block",
+    maxWidth: "calc(100% - 60px)",
     textDecoration: "none",
+    overflowWrap: "anywhere",
   },
   postTitleContainer: {
     flexGrow: 1,
+    width: "100%",
   },
   postBody: {
-    width: "90%",
+    maxWidth: "90%",
     margin: "0 auto 1rem",
     background: "#80808029",
     padding: "1.2rem",
     borderRadius: "5px",
-  },
-  commentsBox: {
-    width: "100%",
-    overFlow: "none",
+    overflowWrap: "anywhere",
   },
 }));
 
@@ -70,6 +74,9 @@ const ViewPost = () => {
 
   useEffect(() => {
     getPostAndComments(dispatch, id);
+    return () => {
+      dispatch({ type: CLEAR_POST_AND_COMMENTS });
+    };
   }, [dispatch, id]);
   return (
     <>
@@ -90,7 +97,9 @@ const ViewPost = () => {
               </Grid>
             </Grid>
             <Grid className={classes.postSide} item>
-              <Typography variant="h6">{post?.title}</Typography>
+              <Typography className={classes.title} variant="h6">
+                {post?.title}
+              </Typography>
               <Grid container justify="space-between">
                 <Typography variant="caption">
                   {`posted ${timeAgo.format(post.date)} by `}{" "}
@@ -131,18 +140,24 @@ const ViewPost = () => {
           ) : null}
           <h4>comments ({post?.numOfComments})</h4>
           {post.comments?.map((comment, index) => (
-            <Box className={classes.commentsBox} key={index}>
-              <Comment
-                recursive={true}
-                comment={comment}
-                OPid={id}
-                maxDepth={5}
-              />
-            </Box>
+            <Comment
+              recursive={true}
+              comment={comment}
+              OPid={id}
+              maxDepth={5}
+              key={index}
+            />
           ))}
         </>
       ) : (
-        <h1>hi</h1>
+        <Grid
+          style={{ minHeight: "80vh" }}
+          container
+          justify="center"
+          alignItems="center"
+        >
+          <CircularProgress />
+        </Grid>
       )}
     </>
   );
