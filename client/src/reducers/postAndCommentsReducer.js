@@ -5,6 +5,7 @@ import {
   LIKE_COMMENT,
   LIKE_POST_AND_COMMENTS,
   CLEAR_POST_AND_COMMENTS,
+  DELETE_POST,
 } from "../actions/types";
 
 const INITIAL_STATE = {};
@@ -47,6 +48,14 @@ export default (state = INITIAL_STATE, action) => {
     }
     case CLEAR_POST_AND_COMMENTS:
       return {};
+
+    case DELETE_POST: {
+      return {
+        ...state,
+        body: "-deleted",
+        userName: "deleted",
+      };
+    }
 
     default:
       return state;

@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostAndComments, likePost } from "../actions/commentActions";
 import Comment from "./Comment";
 import ReplyForm from "./ReplyForm";
-import { Grid, Typography, makeStyles } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  makeStyles,
+  Button,
+  Menu,
+  MenuItem,
+} from "@material-ui/core";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
@@ -48,13 +55,28 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewPost = () => {
   const [modal, setModal] = useState(false);
-  const { id } = useParams();
+  const [sortButton, setSortButton] = useState(null);
+  const history = useHistory();
+  const { id, sort } = useParams();
   const post = useSelector((state) => state.postAndComments);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const userName = useSelector((state) => state.auth.user.userName);
   const dispatch = useDispatch();
   const timeAgo = new TimeAgo("en-US");
   const classes = useStyles();
+
+  const handleClick = (event) => {
+    setSortButton(event.currentTarget);
+  };
+
+  const handleClose = (event) => {
+    setSortButton(null);
+  };
+
+  const handleSort = (event) => {
+    history.push(`/comments/${event.target.textContent}/${id}`);
+    setSortButton(null);
+  };
 
   const getLikedStyle = () => {
     if (!isAuthenticated) return { display: "none" };
@@ -72,11 +94,11 @@ const ViewPost = () => {
   };
 
   useEffect(() => {
-    getPostAndComments(dispatch, id);
+    getPostAndComments(dispatch, { id, sort });
     return () => {
       dispatch({ type: CLEAR_POST_AND_COMMENTS });
     };
-  }, [dispatch, id]);
+  }, [dispatch, id, sort]);
   return (
     <>
       {post.title ? (
@@ -138,6 +160,24 @@ const ViewPost = () => {
             />
           ) : null}
           <h4>comments ({post?.numOfComments})</h4>
+          <Button
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+            style={{ float: "right" }}
+          >
+            {sort}
+          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={sortButton}
+            keepMounted
+            open={Boolean(sortButton)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleSort}>top</MenuItem>
+            <MenuItem onClick={handleSort}>new</MenuItem>
+          </Menu>
           {post.comments?.map((comment, index) => (
             <Comment
               recursive={true}

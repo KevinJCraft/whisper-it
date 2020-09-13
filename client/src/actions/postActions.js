@@ -1,4 +1,4 @@
-import { GET_POSTS, ADD_POST, LIKE_POST } from "./types";
+import { GET_POSTS, ADD_POST, LIKE_POST, DELETE_POST } from "./types";
 import axios from "axios";
 import { tokenConfig } from "./authActions";
 import { createBrowserHistory } from "history";
@@ -32,7 +32,10 @@ export const likePost = (dispatch, data) => {
 
 export const deletePost = (dispatch, { id }) => {
   axios.delete(`/api/posts/delete/${id}`, tokenConfig()).then((res) => {
-    console.log("made it");
+    dispatch({
+      type: DELETE_POST,
+      payload: res.data,
+    });
     createBrowserHistory().push("/");
   });
 };

@@ -25,16 +25,18 @@ const ReplyForm = ({ parentDepth, setExpand, parentType, parentId, OPid }) => {
   };
   const handleSubmitComment = (e) => {
     e.preventDefault();
-    const comment = {
-      body: state,
-      userName: userName,
-      parentType,
-      parentId,
-      OPid,
-      parentDepth,
-    };
-    addComment(dispatch, comment);
-    setState("");
+    if (state.length > 0) {
+      const comment = {
+        body: state,
+        userName: userName,
+        parentType,
+        parentId,
+        OPid,
+        parentDepth,
+      };
+      addComment(dispatch, comment);
+      setState("");
+    }
     if (parentType === "comment") {
       setExpand(false);
     }
@@ -58,6 +60,7 @@ const ReplyForm = ({ parentDepth, setExpand, parentType, parentId, OPid }) => {
             type="submit"
             variant="contained"
             color="primary"
+            disabled={state.length === 0}
           >
             Reply
           </Button>

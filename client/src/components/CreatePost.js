@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "600px",
   },
   icon: {
-    fontSize: "15rem",
+    fontSize: "10rem",
     fill: "#3f51b5",
   },
   form: {

@@ -27,7 +27,7 @@ const ViewProfile = () => {
       {profile.comments.map((comment, index) => (
         <Box style={{ marginTop: "1rem" }} key={index}>
           <Comment recursive={false} comment={comment} />
-          <Link to={`/comments/${comment.OPid}`}>
+          <Link to={`/comments/top/${comment.OPid}`}>
             <Typography>see more</Typography>
           </Link>
         </Box>

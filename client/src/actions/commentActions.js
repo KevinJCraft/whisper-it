@@ -9,9 +9,9 @@ import {
 import axios from "axios";
 import { tokenConfig } from "./authActions";
 
-export const getPostAndComments = (dispatch, id) => {
+export const getPostAndComments = (dispatch, { id, sort }) => {
   axios
-    .get(`/api/posts/one/${id}`)
+    .get(`/api/posts/one/${id}/${sort}`)
     .then((res) => {
       dispatch({
         type: GET_POST_AND_COMMENTS,
@@ -34,7 +34,7 @@ export const addComment = (dispatch, comment) => {
 };
 
 export const deleteComment = (dispatch, { id }) => {
-  axios.put(`/api/comments/delete/${id}`, tokenConfig()).then((res) => {
+  axios.delete(`/api/comments/delete/${id}`, tokenConfig()).then((res) => {
     dispatch({
       type: DELETE_COMMENT,
       payload: res.data,

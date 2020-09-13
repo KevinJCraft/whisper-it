@@ -10,6 +10,7 @@ import store from "../store";
 import ViewPost from "./ViewPost";
 import ViewProfile from "./ViewProfile";
 import ViewExtendedComments from "./ViewExtendedComments";
+import Redirect from "./Redirect";
 
 function App() {
   useEffect(() => {
@@ -22,12 +23,15 @@ function App() {
           <AppBar />
           <Switch>
             <Route exact path="/">
+              <Redirect />
+            </Route>
+            <Route exact path="/posts/:sort">
               <PostList />
             </Route>
             <Route exact path="/create">
               <CreatePost />
             </Route>
-            <Route exact path="/comments/:id">
+            <Route exact path="/comments/:sort/:id">
               <ViewPost />
             </Route>
             <Route exact path="/user/profile/:name">

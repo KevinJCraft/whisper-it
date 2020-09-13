@@ -52,18 +52,33 @@ router.post("/", auth, async (req, res) => {
 // @des Delete (remove content) One Comment
 // @access Public
 
-router.put("/delete/:id", auth, (req, res) => {
+router.delete("/delete/:id", auth, async (req, res) => {
   const id = req.params.id;
-  Comment.findById(id)
-    .then((comment) => {
-      comment.userName = "-deleted-";
-      comment.body = "-deleted-";
-      comment
-        .save()
-        .then((deletedComment) => res.json(deletedComment))
-        .catch((err) => console.log(err));
-    })
-    .catch((err) => console.log(err));
+
+  try {
+    const commentToDelete = await Comment.findById(id);
+
+    commentToDelete.userName = "-deleted-";
+    commentToDelete.body = "-deleted-";
+    if (commentToDelete.comments.length > 0) {
+      await commentToDelete.save();
+    } else {
+      await commentToDelete.delete();
+      const OPid = commentToDelete.OPid;
+      const parentId = commentToDelete.parentId;
+      const op = await Post.findById(OPid);
+      op.numOfComments = op.numOfComments - 1;
+      await op.save();
+      if (OPid !== parentId) {
+        const parentComment = await Comment.findById(OPid);
+        parentComment.numOfComments = parentComment.numOfComments - 1;
+        await parentComment.save();
+      }
+    }
+    res.json(commentToDelete);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // @route PUT api/comments/like

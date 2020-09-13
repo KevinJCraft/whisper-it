@@ -8,6 +8,7 @@ import {
   makeStyles,
   Typography,
   Grid,
+  Divider,
 } from "@material-ui/core";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
   iconSide: {
     padding: ".5rem",
-    flex: "0 0 15px",
+    flex: "0 0 51px",
   },
   postSide: {
     padding: ".5rem",
@@ -49,49 +50,56 @@ const Post = ({ post }) => {
   };
 
   const getLikedStyle = () => {
-    if (!isAuthenticated) return { display: "none" };
+    if (!isAuthenticated) return { visibility: "hidden" };
     if (post.likes.includes(userName)) return { color: "green", fill: "green" };
     else return {};
   };
 
   return (
-    <Grid container className={classes.root} direction="row">
-      <Grid
-        className={classes.iconSide}
-        onClick={handleLike}
-        item
-        container
-        justify="center"
-        alignItems="center"
-        direction="column"
-      >
-        <ArrowDropUpIcon fontSize="large" style={getLikedStyle()} />
-        <Typography align="center">{post.likes.length}</Typography>
-      </Grid>
-      <Grid className={classes.postSide} item>
-        <Link to={`/comments/${post._id}`}>
-          <Typography className={classes.title} variant="h6">
-            {post.title}
-          </Typography>
-        </Link>
-        <Typography variant="caption">
-          {`posted ${timeAgo.format(post.date)} by `}{" "}
-          <Link to={`/user/profile/${post.userName}`}>{post.userName}</Link>
-        </Typography>
-        <Grid item container>
-          <Grid item>
-            <Typography variant="caption">
-              <Link
-                to={`/comments/${post._id}`}
-              >{`    Comments(${post.numOfComments})`}</Link>
-            </Typography>
-          </Grid>
+    <>
+      <Divider variant="middle" />
+      <Grid container className={classes.root} direction="row">
+        <Grid
+          className={classes.iconSide}
+          onClick={handleLike}
+          item
+          container
+          justify="flex-start"
+          alignItems="center"
+          direction="column"
+        >
+          <ArrowDropUpIcon
+            className={classes.icon}
+            fontSize="large"
+            style={getLikedStyle()}
+          />
+          <Typography align="center">{post.likes.length}</Typography>
         </Grid>
-        <Collapse onClick={() => setExpand(false)} in={expand}>
-          <CardContent className={classes.bodyStyle}>{post.body}</CardContent>
-        </Collapse>
+        <Grid className={classes.postSide} item>
+          <Link to={`/comments/top/${post._id}`}>
+            <Typography className={classes.title} variant="h6">
+              {post.title}
+            </Typography>
+          </Link>
+          <Typography variant="caption">
+            {`posted ${timeAgo.format(post.date)} by `}{" "}
+            <Link to={`/user/profile/${post.userName}`}>{post.userName}</Link>
+          </Typography>
+          <Grid item container>
+            <Grid item>
+              <Typography variant="caption">
+                <Link
+                  to={`/comments/top/${post._id}`}
+                >{`    Comments(${post.numOfComments})`}</Link>
+              </Typography>
+            </Grid>
+          </Grid>
+          <Collapse onClick={() => setExpand(false)} in={expand}>
+            <CardContent className={classes.bodyStyle}>{post.body}</CardContent>
+          </Collapse>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

@@ -31,12 +31,22 @@ router.get("/:sort", (req, res) => {
 // @route GET api/posts/one
 // @des GET ONE post by id
 // @access Public
-router.get("/one/:id", (req, res) => {
-  Post.findById(req.params.id)
-    .populate("comments")
-    .sort({ date: -1 })
-    .then((posts) => res.json(posts))
-    .catch((err) => res.status(404).json({ msg: "message not found" }));
+router.get("/one/:id/:sort", async (req, res) => {
+  const id = req.params.id;
+  const sort = req.params.sort || "top";
+
+  try {
+    const post = await Post.findById(id).populate("comments");
+    if (sort === "top") {
+      post.comments.sort((a, b) => b.likes.length - a.likes.length);
+    }
+    if (sort === "new") {
+      post.comments.sort((a, b) => b.date - a.date);
+    }
+    res.json(post);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // @route Post api/posts
@@ -64,11 +74,22 @@ router.post("/", auth, async (req, res) => {
 // @route DELETE api/posts/delete
 // @desc DELETE a post
 // @access Private
-router.delete("/delete/:id", auth, (req, res) => {
+router.delete("/delete/:id", auth, async (req, res) => {
   const id = req.params.id;
-  Post.findById(id)
-    .then((post) => post.remove().then(() => res.json({ success: true })))
-    .catch((err) => res.status(404).json({ success: false }));
+  try {
+    const postToDelete = await Post.findById(id);
+
+    postToDelete.userName = "-deleted-";
+    postToDelete.body = "-deleted-";
+    if (postToDelete.comments.length > 0) {
+      await postToDelete.save();
+    } else {
+      await postToDelete.delete();
+    }
+    res.json(postToDelete);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // @route PUT api/posts/like

@@ -1,4 +1,4 @@
-import { GET_POSTS, ADD_POST, LIKE_POST } from "../actions/types";
+import { GET_POSTS, ADD_POST, LIKE_POST, CLEAR_POSTS } from "../actions/types";
 
 const INITIAL_STATE = [];
 
@@ -15,6 +15,8 @@ export default (state = INITIAL_STATE, action) => {
         else return post;
       });
       return [...posts];
+    case CLEAR_POSTS:
+      return INITIAL_STATE;
 
     default:
       return state;
