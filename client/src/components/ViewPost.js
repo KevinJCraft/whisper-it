@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     display: "block",
-    maxWidth: "calc(100% - 60px)",
     textDecoration: "none",
     overflowWrap: "anywhere",
   },

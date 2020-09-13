@@ -6,6 +6,14 @@ const Post = require("../../models/Post");
 const USer = require("../../models/User");
 const User = require("../../models/User");
 
+// setInterval(async () => {
+//   const posts = await Post.find();
+//   posts.forEach((post) => {
+//     post.numOfComments += 1;
+//   });
+//   posts.save();
+// }, 10000);
+
 // @route GET api/posts
 // @desc Get All posts
 // @access Public
@@ -13,6 +21,7 @@ router.get("/:sort", (req, res) => {
   const type = req.params.sort;
   let sort;
   if (type === "new") sort = { date: -1 };
+  if (type === "top") sort = { likes: -1 };
   Post.find()
     .sort(sort)
     .then((posts) => res.json(posts))

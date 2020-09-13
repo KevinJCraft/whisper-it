@@ -3,8 +3,8 @@ import axios from "axios";
 import { tokenConfig } from "./authActions";
 import { createBrowserHistory } from "history";
 
-export const getPosts = (dispatch) => {
-  axios.get("/api/posts/new").then((res) => {
+export const getPosts = (dispatch, sort) => {
+  axios.get(`/api/posts/${sort}`).then((res) => {
     dispatch({
       type: GET_POSTS,
       payload: res.data,
