@@ -11,6 +11,7 @@ import ViewPost from "./ViewPost";
 import ViewProfile from "./ViewProfile";
 import ViewExtendedComments from "./ViewExtendedComments";
 import Redirect from "./Redirect";
+import ErrorSnackbar from "./ErrorSnackbar";
 
 function App() {
   useEffect(() => {
@@ -19,6 +20,7 @@ function App() {
   return (
     <>
       <Provider store={store}>
+        <ErrorSnackbar />
         <Router>
           <AppBar />
           <Switch>
@@ -37,7 +39,8 @@ function App() {
             <Route exact path="/comments/:sort/:id">
               <ViewPost />
             </Route>
-            <Route exact path="/user/profile/:name">
+
+            <Route exact path="/user/profile/:sort/:name">
               <ViewProfile />
             </Route>
           </Switch>

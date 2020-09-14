@@ -6,14 +6,6 @@ const Post = require("../../models/Post");
 const USer = require("../../models/User");
 const User = require("../../models/User");
 
-// setInterval(async () => {
-//   const posts = await Post.find();
-//   posts.forEach((post) => {
-//     post.numOfComments += 1;
-//   });
-//   posts.save();
-// }, 10000);
-
 // @route GET api/posts
 // @desc Get All posts
 // @access Public
@@ -25,7 +17,7 @@ router.get("/:sort", (req, res) => {
   Post.find()
     .sort(sort)
     .then((posts) => res.json(posts))
-    .catch((err) => res.json());
+    .catch((error) => res.status(400).json({ msg: "posts not found" }));
 });
 
 // @route GET api/posts/one
@@ -45,7 +37,7 @@ router.get("/one/:id/:sort", async (req, res) => {
     }
     res.json(post);
   } catch (error) {
-    console.log(error);
+    res.status(400).json({ msg: "unable to get post" });
   }
 });
 
@@ -67,7 +59,7 @@ router.post("/", auth, async (req, res) => {
     user.save();
     res.json(savedPost);
   } catch (error) {
-    console.log(error);
+    res.status(400).json({ msg: "unable to post" });
   }
 });
 
@@ -81,6 +73,7 @@ router.delete("/delete/:id", auth, async (req, res) => {
 
     postToDelete.userName = "-deleted-";
     postToDelete.body = "-deleted-";
+    postToDelete.deleted = true;
     if (postToDelete.comments.length > 0) {
       await postToDelete.save();
     } else {
@@ -88,7 +81,7 @@ router.delete("/delete/:id", auth, async (req, res) => {
     }
     res.json(postToDelete);
   } catch (error) {
-    console.log(error);
+    res.status(400).json({ msg: "unable to delete post" });
   }
 });
 
@@ -107,7 +100,7 @@ router.put("/like", auth, async (req, res) => {
     const newPost = await post.save();
     res.json(newPost);
   } catch (error) {
-    console.log(error);
+    res.status(400).json({ msg: "unable to like post" });
   }
 });
 

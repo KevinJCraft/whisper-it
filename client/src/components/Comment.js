@@ -14,10 +14,9 @@ TimeAgo.addLocale(en);
 const useStyles = makeStyles((theme) => ({
   root: {
     borderLeft: "2px lightgrey solid",
-    flexWrap: "none",
     paddingLeft: "1rem",
     width: "98%",
-    margtin: "auto",
+    margin: "auto",
   },
   commentSide: {
     padding: ".5rem",
@@ -25,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   bodyStyle: {
     paddingLeft: "4rem",
     overflowWrap: "break-word",
+  },
+  body: {
+    whiteSpace: "pre-wrap",
   },
   postedData: {
     overflowWrap: "break-word",

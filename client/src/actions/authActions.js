@@ -1,5 +1,4 @@
 import axios from "axios";
-import { returnErrors } from "./errorActions";
 
 import {
   USER_LOADED,
@@ -48,13 +47,8 @@ export const register = (dispatch, { userName, password }) => {
     .catch((err) => {
       dispatch({
         type: REGISTER_FAIL,
+        payload: err.response.data.msg,
       });
-      returnErrors(
-        dispatch,
-        err.response.data,
-        err.response.status,
-        "REGISTER_FAIL"
-      );
     });
 };
 
@@ -77,13 +71,8 @@ export const login = (dispatch, { userName, password }) => {
     .catch((err) => {
       dispatch({
         type: LOGIN_FAIL,
+        payload: err.response.data.msg,
       });
-      returnErrors(
-        dispatch,
-        err.response.data,
-        err.response.status,
-        "LOGIN_FAIL"
-      );
     });
 };
 

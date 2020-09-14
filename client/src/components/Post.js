@@ -83,7 +83,9 @@ const Post = ({ post }) => {
           </Link>
           <Typography variant="caption">
             {`posted ${timeAgo.format(post.date)} by `}{" "}
-            <Link to={`/user/profile/${post.userName}`}>{post.userName}</Link>
+            <Link to={`/user/profile/new/${post.userName}`}>
+              {post.userName}
+            </Link>
           </Typography>
           <Grid item container>
             <Grid item>

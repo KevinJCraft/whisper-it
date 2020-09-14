@@ -59,14 +59,21 @@ router.post("/", (req, res) => {
 // @desc GET USer activity
 // @access Public
 
-router.get("/profile/:profileName", async (req, res) => {
+router.get("/profile/:sort/:profileName", async (req, res) => {
   const profileName = req.params.profileName;
+  const type = req.params.sort;
+  let sort;
+  if (type === "new") sort = { date: -1 };
+  if (type === "top") sort = { likes: -1 };
+
   try {
-    const posts = await Post.find({ userName: profileName });
-    const comments = await Comment.find({ userName: profileName });
+    const user = await User.findOne({ userName: profileName });
+    if (!user) throw "no user";
+    const posts = await Post.find({ userName: profileName }).sort(sort);
+    const comments = await Comment.find({ userName: profileName }).sort(sort);
     res.json({ posts, comments, profileName: profileName });
   } catch (error) {
-    console.log(error);
+    res.status(400).json({ msg: "user not found" });
   }
 });
 

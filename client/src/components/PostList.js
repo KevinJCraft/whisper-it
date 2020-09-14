@@ -5,7 +5,7 @@ import {
   Menu,
   MenuItem,
 } from "@material-ui/core";
-import { CLEAR_POSTS } from "../actions/types";
+import { CLEAR_ERRORS, CLEAR_POSTS } from "../actions/types";
 import React, { useState, useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -35,7 +35,10 @@ const PostList = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     getPosts(dispatch, sort);
-    return () => dispatch({ type: CLEAR_POSTS });
+    return () => {
+      dispatch({ type: CLEAR_POSTS });
+      dispatch({ type: CLEAR_ERRORS });
+    };
   }, [dispatch, sort]);
   return posts ? (
     <>
@@ -45,7 +48,7 @@ const PostList = () => {
         onClick={handleClick}
         style={{ float: "right" }}
       >
-        {sort}
+        {`sort: ${sort}`}
       </Button>
       <Menu
         id="simple-menu"

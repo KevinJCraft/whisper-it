@@ -29,7 +29,7 @@ router.post("/", auth, async (req, res) => {
       const newParentPost = await parentPost.save();
       res.json({ newComment });
     } catch (error) {
-      console.log(error);
+      res.status(400).json({ msg: "unable make comment" });
     }
   } else if (req.body.parentType == "comment") {
     try {
@@ -43,7 +43,7 @@ router.post("/", auth, async (req, res) => {
       const newParentComment = await parentComment.save();
       res.json({ newComment });
     } catch (error) {
-      console.log(error);
+      res.status(400).json({ msg: "unable to make comment" });
     }
   }
 });
@@ -60,6 +60,7 @@ router.delete("/delete/:id", auth, async (req, res) => {
 
     commentToDelete.userName = "-deleted-";
     commentToDelete.body = "-deleted-";
+    commentToDelete.deleted = true;
     if (commentToDelete.comments.length > 0) {
       await commentToDelete.save();
     } else {
@@ -72,13 +73,13 @@ router.delete("/delete/:id", auth, async (req, res) => {
     }
     res.json(commentToDelete);
   } catch (error) {
-    console.log(error);
+    res.status(400).json({ msg: "unable to delete comment" });
   }
 });
 
 // @route PUT api/comments/like
 // @des Like One Comment
-// @access Public
+// @access Private
 
 router.put("/like", auth, (req, res) => {
   Comment.findById(req.body.id)
@@ -94,8 +95,12 @@ router.put("/like", auth, (req, res) => {
       comment.likes = newLikes;
       comment.save().then((updatedComment) => res.json(updatedComment));
     })
-    .catch((err) => res.status(404).json({ success: false }));
+    .catch((err) => res.status(404).json({ msg: "unable to like comment" }));
 });
+
+// @route GET api/comments/like
+// @des GET One Comment
+// @access Public
 
 router.get("/:id", async (req, res) => {
   Comment.findById(req.params.id)

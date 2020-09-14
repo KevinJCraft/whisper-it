@@ -18,14 +18,16 @@ import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
 import DeleteModal from "./DeleteModal";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { CLEAR_POST_AND_COMMENTS } from "../actions/types";
+import { CLEAR_ERRORS, CLEAR_POST_AND_COMMENTS } from "../actions/types";
 
 TimeAgo.addLocale(en);
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: "1rem 1rem 0 1rem",
+    maxWidth: "1000px",
+    margin: "auto",
   },
+  post: { padding: "1rem 1rem 0 1rem" },
   iconSide: {
     padding: ".5rem",
   },
@@ -59,6 +61,7 @@ const ViewPost = () => {
   const history = useHistory();
   const { id, sort } = useParams();
   const post = useSelector((state) => state.postAndComments);
+  const error = useSelector((state) => state.error);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const userName = useSelector((state) => state.auth.user.userName);
   const dispatch = useDispatch();
@@ -94,16 +97,18 @@ const ViewPost = () => {
   };
 
   useEffect(() => {
+    if (error.id === "GET_POST_AND_COMMENTS_FAIL") history.push("/");
     getPostAndComments(dispatch, { id, sort });
     return () => {
       dispatch({ type: CLEAR_POST_AND_COMMENTS });
+      dispatch({ type: CLEAR_ERRORS });
     };
-  }, [dispatch, id, sort]);
+  }, [dispatch, id, sort, error, history]);
   return (
-    <>
+    <div className={classes.root}>
       {post.title ? (
         <>
-          <Grid className={classes.root} container direction="row">
+          <Grid className={classes.post} container direction="row">
             <Grid className={classes.iconSide} item>
               <Grid
                 onClick={handleLike}
@@ -124,7 +129,7 @@ const ViewPost = () => {
               <Grid container justify="space-between">
                 <Typography variant="caption">
                   {`posted ${timeAgo.format(post.date)} by `}{" "}
-                  <Link to={`/user/profile/${post.userName}`}>
+                  <Link to={`/user/profile/new/${post.userName}`}>
                     {post.userName}
                   </Link>
                 </Typography>
@@ -166,7 +171,7 @@ const ViewPost = () => {
             onClick={handleClick}
             style={{ float: "right" }}
           >
-            {sort}
+            {`sort: ${sort}`}
           </Button>
           <Menu
             id="simple-menu"
@@ -198,7 +203,7 @@ const ViewPost = () => {
           <CircularProgress />
         </Grid>
       )}
-    </>
+    </div>
   );
 };
 

@@ -97,7 +97,12 @@ const CreatePost = () => {
             helperText={`${state.body.length}/1000`}
           />
 
-          <Button type="submit" variant="contained" color="primary">
+          <Button
+            disabled={!state.body || !state.title}
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
             Submit
           </Button>
         </form>

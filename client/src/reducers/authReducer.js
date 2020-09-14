@@ -7,6 +7,7 @@ import {
   LOGOUT_SUCCESS,
   REGISER_SUCCESS,
   REGISTER_FAIL,
+  CLEAR_AUTH_ERRORS,
 } from "../actions/types";
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
   user: {
     userName: "",
   },
+  error: "",
 };
 
 export default (state = initialState, action) => {
@@ -31,6 +33,7 @@ export default (state = initialState, action) => {
         isAuthenticated: true,
         isLoading: false,
         user: action.payload,
+        error: "",
       };
     case LOGIN_SUCCESS:
     case REGISER_SUCCESS:
@@ -40,10 +43,9 @@ export default (state = initialState, action) => {
         ...action.payload,
         isAuthenticated: true,
         isLoading: false,
+        error: "",
       };
-    case AUTH_ERROR:
     case LOGIN_FAIL:
-    case LOGOUT_SUCCESS:
     case REGISTER_FAIL:
       localStorage.removeItem("token");
       return {
@@ -52,6 +54,22 @@ export default (state = initialState, action) => {
         user: { userName: "" },
         isAuthenticated: false,
         isLoading: false,
+        error: action.payload,
+      };
+    case AUTH_ERROR:
+    case LOGOUT_SUCCESS:
+      localStorage.removeItem("token");
+      return {
+        ...state,
+        token: null,
+        user: { userName: "" },
+        isAuthenticated: false,
+        isLoading: false,
+      };
+    case CLEAR_AUTH_ERRORS:
+      return {
+        ...state,
+        error: "",
       };
     default:
       return state;

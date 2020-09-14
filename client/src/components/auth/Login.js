@@ -5,6 +5,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../actions/authActions";
 import Alert from "@material-ui/lab/Alert";
+import { CLEAR_AUTH_ERRORS } from "../../actions/types";
 
 const useStyles = makeStyles((theme) => ({
   loginModal: {
@@ -48,11 +49,12 @@ const INITIAL_STATE = {
 const Login = () => {
   const [state, setState] = useState(INITIAL_STATE);
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.error);
+  const error = useSelector((state) => state.auth.error);
 
   const classes = useStyles();
 
   const handleClose = () => {
+    dispatch({ type: CLEAR_AUTH_ERRORS });
     setState(INITIAL_STATE);
   };
 
@@ -103,9 +105,7 @@ const Login = () => {
               Login
             </Button>
           </form>
-          {error.id === "LOGIN_FAIL" && (
-            <Alert severity="error">{error.msg.msg}</Alert>
-          )}
+          {error && <Alert severity="error">{error}</Alert>}
         </Paper>
       </Modal>
     </>

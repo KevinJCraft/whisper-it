@@ -34,6 +34,10 @@ const PostSchema = new Schema({
     type: Number,
     default: 0,
   },
+  deleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = Post = mongoose.model("post", PostSchema);

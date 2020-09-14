@@ -4,9 +4,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../actions/authActions";
-import { clearErrors } from "../../actions/errorActions";
 import Alert from "@material-ui/lab/Alert";
 import useFormValidation from "../../hooks/useFormValidation/useFormValidation";
+import { CLEAR_AUTH_ERRORS } from "../../actions/types";
 
 const useStyles = makeStyles((theme) => ({
   registerModal: {
@@ -48,7 +48,7 @@ const INITIAL_STATE = {
 
 const Register = () => {
   const [open, setOpen] = useState(false);
-  const error = useSelector((state) => state.error);
+  const error = useSelector((state) => state.auth.error);
   const dispatch = useDispatch();
   const classes = useStyles();
   const {
@@ -61,7 +61,7 @@ const Register = () => {
   } = useFormValidation(INITIAL_STATE, tryRegister);
 
   const handleClose = () => {
-    clearErrors(dispatch);
+    dispatch({ type: CLEAR_AUTH_ERRORS });
     setValues(INITIAL_STATE);
     setOpen(false);
   };
@@ -123,9 +123,7 @@ const Register = () => {
               Register
             </Button>
           </form>
-          {error.id === "REGISTER_FAIL" && (
-            <Alert severity="error">{error.msg.msg}</Alert>
-          )}
+          {error && <Alert severity="error">{error}</Alert>}
         </Paper>
       </Modal>
     </>

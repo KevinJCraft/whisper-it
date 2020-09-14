@@ -37,6 +37,10 @@ const CommentSchema = new Schema({
     type: Number,
     required: true,
   },
+  deleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 CommentSchema.add({
