@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 const Redirect = () => {

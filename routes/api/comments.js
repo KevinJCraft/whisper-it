@@ -63,17 +63,12 @@ router.delete("/delete/:id", auth, async (req, res) => {
     if (commentToDelete.comments.length > 0) {
       await commentToDelete.save();
     } else {
-      await commentToDelete.delete();
       const OPid = commentToDelete.OPid;
       const parentId = commentToDelete.parentId;
       const op = await Post.findById(OPid);
       op.numOfComments = op.numOfComments - 1;
+      await commentToDelete.delete();
       await op.save();
-      if (OPid !== parentId) {
-        const parentComment = await Comment.findById(OPid);
-        parentComment.numOfComments = parentComment.numOfComments - 1;
-        await parentComment.save();
-      }
     }
     res.json(commentToDelete);
   } catch (error) {

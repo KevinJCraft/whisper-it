@@ -31,14 +31,14 @@ function App() {
             <Route exact path="/create">
               <CreatePost />
             </Route>
+            <Route exact path="/comments/extended/:id">
+              <ViewExtendedComments />
+            </Route>
             <Route exact path="/comments/:sort/:id">
               <ViewPost />
             </Route>
             <Route exact path="/user/profile/:name">
               <ViewProfile />
-            </Route>
-            <Route exact path="/comments/extended/:id">
-              <ViewExtendedComments />
             </Route>
           </Switch>
         </Router>
