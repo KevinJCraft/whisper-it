@@ -12,10 +12,10 @@ const ViewExtendedComments = () => {
 
   useEffect(() => {
     getComment(dispatch, id);
-  }, [dispatch, id]);
+  }, [dispatch, id, comment]);
 
   return comment.userName ? (
-    <Comment recursive comment={comment} OPid={comment.OPid} maxDepth={10} />
+    <Comment recursive comment={comment} OPid={comment.OPid} maxDepth={7} />
   ) : (
     <Grid
       style={{ minHeight: "80vh" }}

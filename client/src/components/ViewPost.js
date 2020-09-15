@@ -189,7 +189,7 @@ const ViewPost = () => {
               recursive={true}
               comment={comment}
               OPid={id}
-              maxDepth={5}
+              maxDepth={7}
               key={index}
             />
           ))}
