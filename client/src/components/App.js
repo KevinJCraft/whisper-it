@@ -12,7 +12,7 @@ import ViewProfile from "./ViewProfile";
 import ViewExtendedComments from "./ViewExtendedComments";
 import Redirect from "./Redirect";
 import ErrorSnackbar from "./ErrorSnackbar";
-import NoMatchURL from "./NoMatchUrl";
+import NoMatchURL from "./NoMatchURL";
 
 function App() {
   useEffect(() => {

@@ -40,7 +40,7 @@ const PostList = () => {
       dispatch({ type: CLEAR_ERRORS });
     };
   }, [dispatch, sort]);
-  return posts ? (
+  return posts[0] ? (
     <>
       <Button
         aria-controls="simple-menu"
