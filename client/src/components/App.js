@@ -12,6 +12,7 @@ import ViewProfile from "./ViewProfile";
 import ViewExtendedComments from "./ViewExtendedComments";
 import Redirect from "./Redirect";
 import ErrorSnackbar from "./ErrorSnackbar";
+import NoMatchURL from "./NoMatchUrl";
 
 function App() {
   useEffect(() => {
@@ -43,6 +44,7 @@ function App() {
             <Route exact path="/user/profile/:sort/:name">
               <ViewProfile />
             </Route>
+            <Route component={NoMatchURL} />
           </Switch>
         </Router>
       </Provider>

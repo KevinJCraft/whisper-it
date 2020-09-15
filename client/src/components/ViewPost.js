@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "1.2rem",
     borderRadius: "5px",
     overflowWrap: "anywhere",
+    whiteSpace: "pre-wrap",
   },
 }));
 
