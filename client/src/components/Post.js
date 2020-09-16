@@ -76,11 +76,9 @@ const Post = ({ post }) => {
           <Typography align="center">{post.likes.length}</Typography>
         </Grid>
         <Grid className={classes.postSide} item>
-          <Link to={`/comments/top/${post._id}`}>
-            <Typography className={classes.title} variant="h6">
-              {post.title}
-            </Typography>
-          </Link>
+          <Typography className={classes.title} variant="h6">
+            <Link to={`/comments/top/${post._id}`}>{post.title}</Link>
+          </Typography>
           <Typography variant="caption">
             {`posted ${timeAgo.format(post.date)} by `}{" "}
             <Link to={`/user/profile/new/${post.userName}`}>
